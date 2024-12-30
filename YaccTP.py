@@ -6,7 +6,7 @@ import sys
 #### Program Structure ####
 
 def p_Program(p):
-    "Program : Header Body"
+    "Program : Header Code"
     p[0] = p[1] + "START\n" + p[2] + "STOP\n"
 
 #___________________________________________________________________________________________________________#
@@ -14,7 +14,7 @@ def p_Program(p):
 #### Header Structure ####
 
 def p_WOHeader(p):
-	"Program : Body"
+	"Program : Code"
 	p[0] = "START\n" + p[1] + "STOP\n"
 
 def p_MultHeader(p):
@@ -42,7 +42,7 @@ def p_SingleDecl(p):
 #### Declaration [Int - Array - Matrix] ####
 
 def p_IntDecl(p):
-	"Decl : NUM Name"
+	"Decl : Var NAME"
 	if p[2] not in p.parser.trackmap:
 		p.parser.trackmap.update({p[2]: p.parser.memPointer})
 		p[0] = f"PUSHI 0\n"
@@ -52,7 +52,7 @@ def p_IntDecl(p):
 		raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.") # acho que isto faz 2 em 1
 
 def p_ArrayDecl(p):
-	"Decl : Var Name '[' Num ']'"
+	"Decl : Var NAME '[' Var ']'"
 	if p[2] not in p.parser.trackmap:
 		p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]))})
 		p[0] = f"PUSHN {p[4]}\n"
@@ -61,7 +61,7 @@ def p_ArrayDecl(p):
 		raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.")
 
 def p_MatrixDecl(p):
-    "Decl : Var Name '[' NUM ']' '[' NUM ']'"
+    "Decl : Var NAME '[' Var ']' '[' Var ']'"
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]), int(p[7]))})
         memSpace = int(p[3]) * int(p[7])
@@ -72,21 +72,22 @@ def p_MatrixDecl(p):
 
 #___________________________________________________________________________________________________________#
 
-#### Body Structure ####
+#### Code Structure ####
 
-def p_MultBody(p):
-    "Body : Code Codes"
+def p_MultCode(p):
+    "Code : Code Codes"
     p[0] = p[1] + p[2]
 
-def p_SingleBody(p):
-	"Body : Code"
+def p_SingleCode(p):
+	"Code : Codes"
 	p[0] = p[1]
 
 def p_Codes(p):
 	"""Codes: Conditions
 			| WhileDo
 			| RepeatUntil
-			| Assigning
+			| Assign
+			| Print
 	"""
 	p[0] = p[1]
 
@@ -95,22 +96,22 @@ def p_Codes(p):
 #### Cycles and Conditions ####
 
 def p_CondIfThen(p):
-	"IfCond : if LPAR cond RPAR then '{' code '}'"
+	"Conditions : if '(' cond ')' then '{' code '}'"
 	p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"l{p.parser.idLabel}: NOP\n" # JZ - Jump Zero: Salta para o l{label} se a condição tiver valor 0 (false)
 	p.parser.idLabel += 1															 # NOP - No Operation (não percebi porque isto é preciso)
 
 def p_CondIfThenOtherwise(p):
-	"IfOtherwiseCond : if LPAR cond RPAR then '{' code '}' otherwise '{' code '}'"
+	"Conditions : if '(' cond ')' then '{' code '}' otherwise '{' code '}'"
 	p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"JUMP l{p.parser.idLabel}f\nl{p.parser.idLabel}: NOP\n" + p[8] + f"l{p.parser.idLabel}f: NOP\n"
 	p.parser.idLabel += 1
 
 def p_WhileDo(p):
-	"WhileDo : while LPAR cond RPAR do '{' code '}'"
+	"WhileDo : while '(' cond ')' do '{' code '}'"
 	p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[3] + f"JZ l{p.parser.idLabel}f\n" + p[6] + f"JUMP l{p.parser.labels}c\nl{p.parser.labels}f: NOP\n"
 	p.parser.idLabel += 1
 
 def p_RepeatUntil(p):
-	"RepeatUntil : repeat '{' code '}' until LPAR Cond RPAR" 
+	"RepeatUntil : repeat '{' code '}' until '(' cond ')'" 
 	p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.labels}c\nl{p.parser.labels}f: NOP\n"
 	p.parser.idLabel += 1
      
@@ -119,7 +120,7 @@ def p_RepeatUntil(p):
 #### Assigning ####
 
 def p_ExpressionAssign(p):
-    "Assign : Name '=' Expr"
+    "Assign : NAME '=' Expr"
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if type(var) == int:
@@ -130,7 +131,7 @@ def p_ExpressionAssign(p):
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_ArrayAssign(p):
-     "Assign : Name '[' Num ']' '=' Expr"
+     "Assign : NAME '[' Var ']' '=' Expr"
      if p[1] in p.parser.trackmap:
           varInfo = p.parser.trackmap.get(p[1])
           if len(varInfo) == 2:
@@ -141,7 +142,7 @@ def p_ArrayAssign(p):
           raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_MatrixAssign(p):
-     "Assign : Name '[' Num ']' '[' Num ']' '=' Expr"
+     "Assign : NAME '[' Var ']' '[' Var ']' '=' Expr"
      if p[1] in p.parser.trackmap:
             varInfo = p.parser.trackmap.get(p[1])
             if len(varInfo) == 3:
@@ -153,10 +154,70 @@ def p_MatrixAssign(p):
 
 #___________________________________________________________________________________________________________#
 
+#### Expressions ####
+
+def p_ExpressionOperations(p):
+    """Expression : Expression '+' Expression
+                  | Expression '-' Expression
+                  | Expression '==' Expression
+                  | Expression '!=' Expression
+                  | '!' Expression
+                  | Expression '>' Expression
+                  | Expression '>=' Expression
+                  | Expression '<' Expression
+                  | Expression '<=' Expression
+                  | Expression '&&' Expression
+                  | Expression '||' Expression
+				  | Expression '*' Expression
+				  | Expression '/' Expression
+				  | Expression '%' Expression
+				  | Var """
+
+    if (p[2] == '+'):
+          p[0] = p[1] + p[3] + "PLUS \n"
+    elif (p[2] == '-'):
+        p[0] = p[1] + p[3] + "MINUS \n"
+    elif (p[2] == "=="):
+        p[0] = p[1] + p[3] + "EQ \n"
+    elif (p[2] == "!="):
+          p[0] = p[1] + p[3] + "NEQ \n"
+    elif (p[1] == '!'):
+        p[0] = p[2] + "NOT \n"
+    elif (p[2] == '>'):
+        p[0] = p[1] + p[3] + "MORE \n"
+    elif (p[2] == ">="):
+        p[0] = p[1] + p[3] + "MOREEQ \n"
+    elif (p[2] == '<'):
+        p[0] = p[1] + p[3] + "LESS \n"
+    elif (p[2] == "<="):
+        p[0] = p[1] + p[3] + "LESSEQ \n"
+    elif (p[2] == "&&"):
+        p[0] = p[1] + p[3] + "AND \n"
+    elif (p[2] == "||"):
+        p[0] = p[1] + p[3] + "OR \n"
+    elif (p[2] == '*'):
+	    p[0] = p[1] + p[3] + "MULT \n"
+    elif (p[2] == '/'):
+	    p[0] = p[1] + p[3] + "DIV \n"
+    elif (p[2] == '%'):
+        p[0] = p[1] + p[3] + "MOD \n"
+    elif (p[1] == "Var"):
+        p[0] = p[1]
+
+def p_Expr_base(p):
+    "Expr : '(' Expr ')'"
+    p[0] = p[2]
+
+def p_condition_base(p):
+    "condition : '(' condition ')'"
+    p[0] = p[2]
+
+#___________________________________________________________________________________________________________#
+
 #### Acessing Vars (Num - Array - Matrix ) ####
 
 def p_VarNum(p):
-	"Var : Name"
+	"Var : NAME"
 	if p[1] in p.parser.trackmap:
 		var = p.parser.trackmap.get(p[1])
 		if type(var) == int:
@@ -167,7 +228,7 @@ def p_VarNum(p):
 		raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_VarArray(p):
-	"Var : Name '[' Num ']'"
+	"Var : NAME '[' Var ']'"
 	if p[1] in p.parser.trackmap:
 		varInfo = p.parser.trackmap.get(p[1])
 		if len(varInfo) == 2:
@@ -178,7 +239,7 @@ def p_VarArray(p):
 		raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_VarMatrix(p):
-	"Var : Name '[' Num ']' '[' Num ']'"
+	"Var : NAME '[' Var ']' '[' Var ']'"
 	if p[1] in p.parser.trackmap:
 		varInfo = p.parser.trackmap.get(p[1])
 		if len(varInfo) == 3:
@@ -193,71 +254,16 @@ def p_VarMatrix(p):
 def p_error(p):
     print(f"Syntax error: token {p.value} on line {p.lineno}.")
 
-
-
-def p_ExpressionOperations(p):
-    """Expression : Expression PLUS Term
-                  | Expression MINUS Term
-                  | Expression EQ Term
-                  | Expression NEQ Term
-                  | NOT Term
-                  | Expression MORE Term
-                  | Expression MOREEQ Term
-                  | Expression LESS Term
-                  | Expression LESSEQ Term
-                  | Expression AND Term
-                  | Expression OR Term"""
-
-    if (p[2] == '+'):
-          p[0] = p[1] + p[3] + "PLUS \n"
-    elif (p[2] == '-'):
-        p[0] = p[1] + p[3] + "MINUS \n"
-    elif (p[2] == "=="):
-        p[0] = p[1] + p[3] + "EQ \n"
-    elif (p[2] == "!="):
-          p[0] = p[1] + p[3] + "NEQ \n"
-    elif (p[2] == '!'):
-        p[0] = p[1] + "NOT \n"
-    elif (p[2] == '>'):
-        p[0] = p[1] + p[3] + "MORE \n"
-    elif (p[2] == ">="):
-        p[0] = p[1] + p[3] + "MOREEQ \n"
-    elif (p[2] == '<'):
-        p[0] = p[1] + p[3] + "LESS \n"
-    elif (p[2] == "<="):
-        p[0] = p[1] + p[3] + "LESSEQ \n"
-    elif (p[2] == "&"):
-        p[0] = p[1] + p[3] + "AND \n"
-    elif (p[2] == "||"):
-        p[0] = p[1] + p[3] + "OR \n"
-
-def p_TermOperations(p):
-    """Term : Term MULT Factor
-            | Term DIV Factor
-            | Term MOD Factor"""
-    if p[2] == '*':
-        p[0] = p[1] + p[3] + "MULT \n"
-    elif p[2] == '/':
-        p[0] = p[1] + p[3] + "DIV \n"
-    elif p[2] == '%':
-        p[0] = p[1] + p[3] + "MOD \n"
-
-
-
-def p_condition_base(p):
-    "condition : LPAR condition RPAR"
-    p[0] = p[2]
-
 #___________________________________________________________________________________________________________#
 
 #### Print ####
 
 def p_Print(p):
-      "Print : print LPAR Expr RPAR"
-      p[0] = p[3] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
+	"Print : print '(' Expr ')'"
+	p[0] = p[3] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
 
 def p_PrintArrMat(p):
-	"Print : print LPAR Var RPAR"
+	"Print : print '(' Var ')'"
 	if p[3] in p.parser.trackmap:
 		var = p.parser.trackmap.get(p[3])
 		if type(var) == tuple:
@@ -299,7 +305,7 @@ def main():
     int a;
 	int b;
     
-    # Body
+    # Code
     a = 5;
 	b = 6;
     

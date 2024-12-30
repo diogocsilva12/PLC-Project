@@ -1,37 +1,26 @@
 import ply.lex as lex
 
 
-tokens = (
-    'TYPE',
-    'ID',
-    'EQ', 
-    'NEQ',
-    'ÑOT', 
-    'MORE', 
-    'MOREEQ', 
-    'LESS', 
-    'LESSEQ', 
-    'NUM', 
-    'PLUS',
-    'MINUS',
-    'DIV',
-    'MULT', 
-    'AND',
-    'OR',
-    'PRINT', 
-    'INPUT', 
-    'STRING',
-    'OTHERWISE', 
-    'WHILE', 
-    'DO',
-    'MOD',
-    'LPAR',
-    'RPAR',
-    'REPEAT',
-    'UNTIL'
-)
+reserved = {
+    'array': 'ARRAY',
+    'matrix': 'MATRIX',
+    'print': 'PRINT',
+    'input': 'INPUT',
+    'while': 'WHILE',
+    'do': 'DO',
+    'repeat': 'REPEAT',
+    'until': 'UNTIL',
+    'if': 'IF',
+    'then': 'THEN',
+    'otherwise': 'OTHERWISE'
+}
 
-literals = [':',',','=','{','}','|','"','']
+# Tokens
+tokens = [
+    'NAME',
+] + list(reserved.values())
+
+literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!','~','&','||']
 
 #Regras
 t_PLUS = r'\+' #soma
@@ -91,6 +80,14 @@ def t_REPEAT(t):
 
 def t_UNTIL(t):
     r'until'
+    return t
+
+def t_IF(t):
+    r'if'
+    return t
+
+def t_THEN(t):
+    r'then'
     return t
 
 def t_OTHERWISE(t):
