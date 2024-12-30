@@ -1,6 +1,5 @@
 import ply.lex as lex
 
-
 reserved = {
     'array': 'ARRAY',
     'matrix': 'MATRIX',
@@ -20,7 +19,7 @@ tokens = [
     'NAME',
 ] + list(reserved.values())
 
-literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!','~','&','||']
+literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!','||','>=','<=','==','!=','&&']
 
 #Regras
 t_PLUS = r'\+' #soma
@@ -41,7 +40,7 @@ t_AND = r'\&' # e/and
 t_OR = r'\|\|' # ou/or
 
 
-def t_ID(t):
+def t_NAME(t):
     r'[a-zA-Z0-9]+'
     return t
 
@@ -58,7 +57,7 @@ def t_INPUT(t):
     r'input'
     return t
 
-def t_STRING(t):
+def t_STRING(t): # não usado para já
     r'\"[^"]*\"'
     return t
 
@@ -68,10 +67,6 @@ def t_WHILE(t):
 
 def t_DO(t):
     r'do'
-    return t
-
-def t_TYPE(t):
-    r'NUM|STRING'
     return t
 
 def t_REPEAT(t):
