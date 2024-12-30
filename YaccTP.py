@@ -1,4 +1,4 @@
-from myLex import tokens
+from LexTP import tokens
 import ply.yacc as yacc
 import sys
 #___________________________________________________________________________________________________________#
