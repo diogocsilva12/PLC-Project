@@ -11,32 +11,39 @@ reserved = {
     'until': 'UNTIL',
     'if': 'IF',
     'then': 'THEN',
-    'otherwise': 'OTHERWISE'
+    'otherwise': 'OTHERWISE',
+    'eq': 'EQ',
+    'neq': 'NEQ',
+    'moreeq': 'MOREEQ',
+    'lesseq': 'LESSEQ',
+    'and': 'AND',
+    'or': 'OR'
 }
+
 
 # Tokens
 tokens = [
     'NAME',
 ] + list(reserved.values())
 
-literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!','||','>=','<=','==','!=','&&']
+literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!']
 
 #Regras
-t_PLUS = r'\+' #soma
-t_MINUS = r'\-' #subtração
-t_DIV = r'\/' #divisão
-t_MULT = r'\*' #multiplicação
-t_MORE = r'\>' #maior
-t_LESS = r'\<'  #menor
+#t_PLUS = r'\+' #soma
+#t_MINUS = r'\-' #subtração
+#t_DIV = r'\/' #divisão
+#t_MULT = r'\*' #multiplicação
+#t_MORE = r'\>' #maior
+#t_LESS = r'\<'  #menor
 t_EQ = r'\=\=' #igual
 t_NEQ = r'\!\=' #diferente
-t_NOT = r'\~' #não
+#t_NOT = r'\!' #não
 t_MOREEQ = r'\>\=' #maior ou igual
 t_LESSEQ  = r'\<\=' # menor ou igual
-t_MOD = r'\%' #resto
-t_LPAR = r'\(' #parenteses esquerdo
-t_RPAR = r'\)' #parenteses direito
-t_AND = r'\&' # e/and
+#t_MOD = r'\%' #resto
+#t_LPAR = r'\(' #parenteses esquerdo
+#t_RPAR = r'\)' #parenteses direito
+t_AND = r'\&\&' # e/and
 t_OR = r'\|\|' # ou/or
 
 
