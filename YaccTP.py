@@ -96,17 +96,17 @@ def p_Codes(p):
 #### Cycles and Conditions ####
 
 def p_CondIfThen(p):
-    "Conditions : IF '(' cond ')' THEN '{' Code '}'"
+    "Conditions : IF '(' Condition ')' THEN '{' Code '}'"
     p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"l{p.parser.idLabel}: NOP\n" # JZ - Jump Zero: Salta para o l{label} se a condição tiver valor 0 (false)
     p.parser.idLabel += 1                                                            # NOP - No Operation (não percebi porque isto é preciso)
 
 def p_CondIfThenOtherwise(p):
-    "Conditions : IF '(' cond ')' THEN '{' Code '}' OTHERWISE '{' Code '}'"
+    "Conditions : IF '(' Condition ')' THEN '{' Code '}' OTHERWISE '{' Code '}'"
     p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"JUMP l{p.parser.idLabel}f\nl{p.parser.idLabel}: NOP\n" + p[8] + f"l{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
 
 def p_WhileDo(p):
-    "WhileDo : WHILE '(' cond ')' DO '{' Code '}'"
+    "WhileDo : WHILE '(' Condition ')' DO '{' Code '}'"
     p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[3] + f"JZ l{p.parser.idLabel}f\n" + p[6] + f"JUMP l{p.parser.labels}c\nl{p.parser.labels}f: NOP\n"
     p.parser.idLabel += 1
 
@@ -155,29 +155,52 @@ def p_MatrixAssign(p):
 #___________________________________________________________________________________________________________#
 
 #### Expressions ####
+def p_Expr_condition(p):
+    'Expr : Condition'
+    p[0] = p[1]
 
-def p_ExpressionOperations(p):
-    """Expression : Expression '+' Expression
-                  | Expression '-' Expression
-                  | Expression EQ Expression
-                  | Expression NEQ Expression
-                  | '!' Expression
-                  | Expression '>' Expression
-                  | Expression MOREEQ Expression
-                  | Expression '<' Expression
-                  | Expression LESSEQ Expression
-                  | Expression AND Expression
-                  | Expression OR Expression
-                  | Expression '*' Expression
-                  | Expression '/' Expression
-                  | Expression '%' Expression
-                  | Var """
+def p_Expr(p):
+    'Expr : Var'
+    p[0] = p[1]
 
+'''
+def p_opBasicSUM(p):
+    'Expr : Expr "+" Expr'
+    p[0] = p[1] + p[3] + 'ADD\n'
+'''
+
+def p_Expr_OP(p):
+    """Expr : Expr "+" Expr
+            | Expr "-" Expr
+            | Expr "*" Expr
+            | Expr "/" Expr
+            | Expr "%" Expr
+    """
     if (p[2] == '+'):
-          p[0] = p[1] + p[3] + "PLUS \n"
+          p[0] = p[1] + p[3] + "ADD \n"
     elif (p[2] == '-'):
-        p[0] = p[1] + p[3] + "MINUS \n"
-    elif (p[2] == "=="):
+        p[0] = p[1] + p[3] + "SUB \n"
+    elif (p[2] == '*'):
+        p[0] = p[1] + p[3] + "MUL \n"
+    elif (p[2] == '/'):
+        p[0] = p[1] + p[3] + "DIV \n"
+    elif (p[2] == '%'):
+        p[0] = p[1] + p[3] + "MOD \n"            
+
+
+def p_condLog(p):
+    """Condition : Expr EQ Expr
+                  | Expr NEQ Expr
+                  | '!' Expr
+                  | Expr '>' Expr
+                  | Exprn MOREEQ Expr
+                  | Expr '<' Expr
+                  | Expr LESSEQ Expr
+                  | Exprn AND Expr
+                  | Expr OR Expr
+                  """
+     
+    if (p[2] == "=="):
         p[0] = p[1] + p[3] + "EQ \n"
     elif (p[2] == "!="):
           p[0] = p[1] + p[3] + "NEQ \n"
@@ -195,15 +218,10 @@ def p_ExpressionOperations(p):
         p[0] = p[1] + p[3] + "AND \n"
     elif (p[2] == "||"):
         p[0] = p[1] + p[3] + "OR \n"
-    elif (p[2] == '*'):
-        p[0] = p[1] + p[3] + "MULT \n"
-    elif (p[2] == '/'):
-        p[0] = p[1] + p[3] + "DIV \n"
-    elif (p[2] == '%'):
-        p[0] = p[1] + p[3] + "MOD \n"
     elif (p[1] == "Var"):
         p[0] = p[1]
-
+    
+    
 def p_Expr_base(p):
     "Expr : '(' Expr ')'"
     p[0] = p[2]
