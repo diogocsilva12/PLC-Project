@@ -18,7 +18,7 @@ def p_WOHeader(p):
     p[0] = "START\n" + p[1] + "STOP\n"
 
 def p_MultHeader(p):
-    "Header : Decl Decls"
+    "Header : Header Decl"
     p[0] = p[1] + p[2]
 
 def p_SingleHeader(p):
@@ -27,32 +27,20 @@ def p_SingleHeader(p):
 
 #___________________________________________________________________________________________________________#
 
-#### Declarations ####
-
-def p_MultDecl(p):
-    "Decls : Decl Decls"
-    p[0] = p[1] + p[2]
-
-def p_SingleDecl(p):
-    "Decls : Decl"
-    p[0] = p[1]
-
-#___________________________________________________________________________________________________________#
-
 #### Declaration [Int - Array - Matrix] ####
 
 def p_IntDecl(p):
-    "Decl : Var NAME"
+    "Decl : VAR NAME"  #example: Var a
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: p.parser.memPointer})
-        p[0] = f"PUSHI 0\n"
+        p[0] = "PUSHI 0\n"
         p.parser.memPointer += 1
     else:
         print(f"Variable {p[2]} already declared")
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.") # acho que isto faz 2 em 1
 
 def p_ArrayDecl(p):
-    "Decl : Var NAME '[' Var ']'"
+    "Decl : VAR NAME '[' NUM ']'" #example: Var a[3]  # Array tem de permitir Expr para ver índices (letras) nos ciclos
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]))})
         p[0] = f"PUSHN {p[4]}\n"
@@ -61,11 +49,11 @@ def p_ArrayDecl(p):
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.")
 
 def p_MatrixDecl(p):
-    "Decl : Var NAME '[' Var ']' '[' Var ']'"
+    "Decl : VAR NAME '[' Expr ']' '[' Expr ']'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]), int(p[7]))})
-        memSpace = int(p[3]) * int(p[7])
-        p[0] = f"PUSHN {str(memSpace)}\n" # Porquê str e não int? 
+        memSpace = int(p[4]) * int(p[7])
+        p[0] = f"PUSHN {str(memSpace)}\n" # Porquê str e não int? R: Porque memSpace é inteiro e queremos converter para string
         p.parser.memPointer += memSpace
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.")
@@ -102,17 +90,17 @@ def p_CondIfThen(p):
 
 def p_CondIfThenOtherwise(p):
     "Conditions : IF '(' Condition ')' THEN '{' Code '}' OTHERWISE '{' Code '}'"
-    p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"JUMP l{p.parser.idLabel}f\nl{p.parser.idLabel}: NOP\n" + p[8] + f"l{p.parser.idLabel}f: NOP\n"
+    p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[7] + f"JUMP l{p.parser.idLabel}f\nl{p.parser.idLabel}: NOP\n" + p[11] + f"l{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
 
 def p_WhileDo(p):
     "WhileDo : WHILE '(' Condition ')' DO '{' Code '}'"
-    p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[3] + f"JZ l{p.parser.idLabel}f\n" + p[6] + f"JUMP l{p.parser.labels}c\nl{p.parser.labels}f: NOP\n"
+    p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[3] + f"JZ l{p.parser.idLabel}f\n" + p[7] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
 
 def p_RepeatUntil(p):
-    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' cond ')'" 
-    p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.labels}c\nl{p.parser.labels}f: NOP\n"
+    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')'" 
+    p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
      
 #___________________________________________________________________________________________________________#
@@ -120,18 +108,18 @@ def p_RepeatUntil(p):
 #### Assigning ####
 
 def p_ExpressionAssign(p):
-    "Assign : NAME '=' Expr"
+    "Assign : NAME '=' Expr"  #exemplo : b = 2 
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if type(var) == int:
             p[0] = p[3] + f"STOREG {var}\n"
         else:
-            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not an integer.")
+            raise TypeError(f"Line{p.lineno(2)}, {p[1]} ## is not an integer.")
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_ArrayAssign(p):
-     "Assign : NAME '[' Var ']' '=' Expr"
+     "Assign : NAME '[' NUM ']' '=' Expr"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
           varInfo = p.parser.trackmap.get(p[1])
           if len(varInfo) == 2:
@@ -142,7 +130,7 @@ def p_ArrayAssign(p):
           raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_MatrixAssign(p):
-     "Assign : NAME '[' Var ']' '[' Var ']' '=' Expr"
+     "Assign : NAME '[' Expr ']' '[' Expr ']' '=' Expr"     # Matriz tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
             varInfo = p.parser.trackmap.get(p[1])
             if len(varInfo) == 3:
@@ -160,8 +148,12 @@ def p_Expr_condition(p):
     p[0] = p[1]
 
 def p_Expr(p):
-    'Expr : Var'
+    'Expr : Variable'
     p[0] = p[1]
+
+def p_expression_number(p):
+    "Expr : NUM"
+    p[0] = f"PUSHI {p[1]}\n"
 
 '''
 def p_opBasicSUM(p):
@@ -177,7 +169,7 @@ def p_Expr_OP(p):
             | Expr "%" Expr
     """
     if (p[2] == '+'):
-          p[0] = p[1] + p[3] + "ADD \n"
+        p[0] = p[1] + p[3] + "ADD \n"
     elif (p[2] == '-'):
         p[0] = p[1] + p[3] + "SUB \n"
     elif (p[2] == '*'):
@@ -193,10 +185,10 @@ def p_condLog(p):
                   | Expr NEQ Expr
                   | '!' Expr
                   | Expr '>' Expr
-                  | Exprn MOREEQ Expr
+                  | Expr MOREEQ Expr
                   | Expr '<' Expr
                   | Expr LESSEQ Expr
-                  | Exprn AND Expr
+                  | Expr AND Expr
                   | Expr OR Expr
                   """
      
@@ -227,7 +219,7 @@ def p_Expr_base(p):
     p[0] = p[2]
 
 def p_condition_base(p):
-    "condition : '(' condition ')'"
+    "Condition : '(' Condition ')'"
     p[0] = p[2]
 
 #___________________________________________________________________________________________________________#
@@ -235,18 +227,18 @@ def p_condition_base(p):
 #### Acessing Vars (Num - Array - Matrix ) ####
 
 def p_VarNum(p):
-    "Var : NAME"
+    "Variable : NAME"
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if type(var) == int:
             p[0] = f"PUSHG {var}\n"
         else:
-            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not an integer.")
+            raise TypeError(f"Line {p.lineno(1)}, {p[1]} %% is not an integer.")
     else:
-        raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
+        raise Exception(f"Line {p.lineno(1)}, {p[1]} is not declared.")
 
 def p_VarArray(p):
-    "Var : NAME '[' Var ']'"
+    "Variable : NAME '[' NUM ']'"
     if p[1] in p.parser.trackmap:
         varInfo = p.parser.trackmap.get(p[1])
         if len(varInfo) == 2:
@@ -257,7 +249,7 @@ def p_VarArray(p):
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_VarMatrix(p):
-    "Var : NAME '[' Var ']' '[' Var ']'"
+    "Variable : NAME '[' NUM ']' '[' NUM ']'"
     if p[1] in p.parser.trackmap:
         varInfo = p.parser.trackmap.get(p[1])
         if len(varInfo) == 3:
@@ -277,13 +269,13 @@ def p_error(p):
 #### Print ####
 
 def p_Print(p):
-    "Print : print '(' Expr ')'"
-    p[0] = p[3] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
+    "Print : PRINT Expr"
+    p[0] = p[2] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
 
 def p_PrintArrMat(p):
-    "Print : print '(' Var ')'"
-    if p[3] in p.parser.trackmap:
-        var = p.parser.trackmap.get(p[3])
+    "Print : PRINT NAME"
+    if p[2] in p.parser.trackmap:
+        var = p.parser.trackmap.get(p[2])
         if type(var) == tuple:
             if len(var) == 2:
                 array = f'PUSHS "[ "\nWRITES\n'
@@ -301,9 +293,9 @@ def p_PrintArrMat(p):
                     matrix += 'PUSHS "]\\n"\nWRITES\n'
                 p[0] = matrix
         else:
-            raise TypeError(f"Line{p.lineno(2)}, {p[3]} is not an array or matrix.")
+            raise TypeError(f"Line{p.lineno(2)}, {p[2]} is not an array or matrix.")
     else:
-        raise Exception(f"Line{p.lineno(2)}, {p[3]} is not declared.")
+        raise Exception(f"Line{p.lineno(2)}, {p[2]} is not declared.")
 
 #___________________________________________________________________________________________________________#
 
@@ -368,4 +360,19 @@ def main():
     
     print a;
     
+'''
+
+
+'''
+
+DEBUGGING:
+
+Acho que tem bug na forma como definimos as 'Expr', temos de confirmar o que uma 'Expr'
+pode ser, i.e., ver se uma Expr pode ser uma variável qql, por exemplo um i (iteração).
+
+
+PARA VER, TALVEZ:
+
+Alterar o IdLabels para dividir entre IfLabel e CycleLabel
+
 '''

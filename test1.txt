@@ -1,8 +1,33 @@
-int a;
-int b;
-a = 5;
-b = 10;
+var a
+var b
+var c
 
-while (a < b) do {
-    a = a + 1;
+a = 10
+b = 20
+c = 0
+
+print a
+print b
+
+
+if (a < b) then {
+    c = a + b
+} otherwise {
+    c = a - b
 }
+
+print c
+
+
+while (c > 0) do {
+    c = c - 2
+}
+
+print c
+
+
+repeat {
+    c = c + 1
+} until (c == 5)
+
+print c 
