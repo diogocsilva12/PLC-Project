@@ -18,7 +18,8 @@ reserved = {
     'moreeq': 'MOREEQ',
     'lesseq': 'LESSEQ',
     'and': 'AND',
-    'or': 'OR'
+    'or': 'OR',
+    #'function': 'FUNCTION',
 }
 
 
@@ -34,10 +35,8 @@ literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','
 #Regras
 t_EQ = r'\=\=' #igual
 t_NEQ = r'\!\=' #diferente
-
 t_MOREEQ = r'\>\=' #maior ou igual
 t_LESSEQ  = r'\<\=' # menor ou igual
-
 t_AND = r'\&\&' # e/and
 t_OR = r'\|\|' # ou/or
 
@@ -60,6 +59,10 @@ def t_NUM(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+    
+'''def t_comment(t):
+    r'\#.*'
+    pass'''
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
