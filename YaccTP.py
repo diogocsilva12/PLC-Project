@@ -1,6 +1,7 @@
 from LexTP import tokens
 import ply.yacc as yacc
 import sys
+import os
 #___________________________________________________________________________________________________________#
 
 #### Program Structure ####
@@ -342,7 +343,7 @@ parser.memPointer = 0
 if len(sys.argv) > 1:
     input_file = sys.argv[1]
     # Generate output filename by prepending "res" to input filename
-    output_file = "res" + os.path.basename(input_file)
+    output_file = "Assembly_" + os.path.basename(input_file)
     
     with open(input_file, 'r') as file:
         assembly = parser.parse(file.read())
