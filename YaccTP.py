@@ -64,11 +64,11 @@ def p_ArrayDecl(p):
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.")  # Handle re-declaration errors.
 
 def p_MatrixDecl(p):
-    "Decl : VAR NAME '[' Expr ']' '[' Expr ']'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
+    "Decl : VAR NAME '[' NUM ']' '[' NUM ']'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]), int(p[7]))})
-        memSpace = int(p[4]) * int(p[7])# Calculate total memory required for the matrix.
-        p[0] = f"PUSHN {str(memSpace)}\n"  # Allocate memory for the matrix.
+        memSpace = int(p[4]) * int(p[7]) # Calculate total memory required for the matrix.
+        p[0] = f"PUSHN {memSpace}\n"  # Allocate memory for the matrix.
         p.parser.memPointer += memSpace  # Update memory pointer.
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.") # Prevent redeclaration.
@@ -143,7 +143,7 @@ def p_ExpressionAssign(p):
 
 # This rule handles array assignments.
 def p_ArrayAssign(p):
-     "Assign : NAME '[' NUM ']' '=' Expr"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
+     "Assign : NAME '[' Expr ']' '=' Expr"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
           varInfo = p.parser.trackmap.get(p[1])
           if len(varInfo) == 2:
@@ -154,12 +154,12 @@ def p_ArrayAssign(p):
           raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 # This rule handles matrix assignments.
-def p_MatrixAssign(p):
+def p_MatrixAssign(p): # Nome[Expr][Expr] = Expr
      "Assign : NAME '[' Expr ']' '[' Expr ']' '=' Expr"     # Matriz tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
             varInfo = p.parser.trackmap.get(p[1])
             if len(varInfo) == 3:
-                  p[0] = f'PUSHGP\nPUSHI {varInfo[0]}\nPADD\n' + p[3] + f'PUSHI {varInfo[2]}\nMUL\n' + p[6] + 'ADD\n' + p[9] + 'STOREN\n'
+                  p[0] = f'PUSHGP\nPUSHI {varInfo[0]}\nPADD\n{p[3]}PUSHI {varInfo[2]}\nMUL\n{p[6]}ADD\n{p[9]}STOREN\n'
             else:
                   raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not a matrix.")
      else:
@@ -175,7 +175,7 @@ def p_Expr_condition(p):
     p[0] = p[1]
 
 # This rule processes a variable as an expression.
-def p_Expr(p):
+def p_Expr_Variable(p):
     'Expr : Variable'
     p[0] = p[1]
 
@@ -224,27 +224,27 @@ def p_condLog(p):
                   """
      
     if (p[2] == "=="):
-        p[0] = p[1] + p[3] + "EQ \n"
+        p[0] = p[1] + p[3] + "EQUAL \n"
     elif (p[2] == "!="):
-          p[0] = p[1] + p[3] + "NEQ \n"
+          p[0] = p[1] + p[3] + "EQUAL\nNOT \n"
     elif (p[1] == '!'):
         p[0] = p[2] + "NOT \n"
     elif (p[2] == '>'):
-        p[0] = p[1] + p[3] + "MORE \n"
+        p[0] = p[1] + p[3] + "SUP \n"
     elif (p[2] == ">="):
-        p[0] = p[1] + p[3] + "MOREEQ \n"
+        p[0] = p[1] + p[3] + "SUPEQ \n"
     elif (p[2] == '<'):
-        p[0] = p[1] + p[3] + "LESS \n"
+        p[0] = p[1] + p[3] + "INF \n"
     elif (p[2] == "<="):
-        p[0] = p[1] + p[3] + "LESSEQ \n"
+        p[0] = p[1] + p[3] + "INFEQ \n"
     elif (p[2] == "&&"):
-        p[0] = p[1] + p[3] + "AND \n"
+        p[0] = p[1] + p[3] + 'ADD\nPUSHI 2\nEQUAL\n'
     elif (p[2] == "||"):
-        p[0] = p[1] + p[3] + "OR \n"
+        p[0] = p[1] + p[3] + "ADD\nPUSHI 1\nSUPEQ\n"
     elif (p[1] == "Var"):
         p[0] = p[1]
-    
-    
+
+
 def p_Expr_base(p):
     "Expr : '(' Expr ')'"
     p[0] = p[2]
@@ -269,7 +269,7 @@ def p_VarNum(p):
         raise Exception(f"Line {p.lineno(1)}, {p[1]} is not declared.")
 
 def p_VarArray(p):
-    "Variable : NAME '[' NUM ']'"
+    "Variable : NAME '[' Expr ']'"
     if p[1] in p.parser.trackmap:
         varInfo = p.parser.trackmap.get(p[1])
         if len(varInfo) == 2:
@@ -280,7 +280,7 @@ def p_VarArray(p):
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_VarMatrix(p):
-    "Variable : NAME '[' NUM ']' '[' NUM ']'"
+    "Variable : NAME '[' Expr ']' '[' Expr ']'"
     if p[1] in p.parser.trackmap:
         varInfo = p.parser.trackmap.get(p[1])
         if len(varInfo) == 3:

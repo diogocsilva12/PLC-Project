@@ -1,0 +1,10 @@
+var x
+var y
+var result
+
+x = READ
+y = READ
+
+result = x + y
+
+print(result)

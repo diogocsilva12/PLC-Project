@@ -1,11 +1,11 @@
 import ply.lex as lex
 
 reserved = {
-    'int': 'INT',
     'array': 'ARRAY',
     'matrix': 'MATRIX',
     'print': 'PRINT',
     'input': 'INPUT',
+    'read': 'READ',
     'while': 'WHILE',
     'do': 'DO',
     'repeat': 'REPEAT',
@@ -19,7 +19,6 @@ reserved = {
     'lesseq': 'LESSEQ',
     'and': 'AND',
     'or': 'OR',
-    #'function': 'FUNCTION',
 }
 
 
@@ -50,7 +49,6 @@ def t_NAME(t):
     t.type = reserved.get(t.value, 'NAME')
     return t
 
-
 def t_NUM(t):
     r'\d+'
     t.value = int(t.value)
@@ -59,10 +57,6 @@ def t_NUM(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
-    
-'''def t_comment(t):
-    r'\#.*'
-    pass'''
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
