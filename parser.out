@@ -1,13 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    ARRAY
-    INPUT
-    MATRIX
-    NOT
-    READ
-
 Grammar
 
 Rule 0     S' -> Program
@@ -56,8 +48,11 @@ Rule 42    Condition -> ( Condition )
 Rule 43    Variable -> NAME
 Rule 44    Variable -> NAME [ Expr ]
 Rule 45    Variable -> NAME [ Expr ] [ Expr ]
-Rule 46    Print -> PRINT Expr
-Rule 47    Print -> PRINT NAME
+Rule 46    Assign -> NAME [ Expr ] = INPUT
+Rule 47    Assign -> NAME [ Expr ] [ Expr ] = INPUT
+Rule 48    Assign -> NAME = INPUT
+Rule 49    Print -> PRINT Expr
+Rule 50    Print -> PRINT NAME
 
 Terminals, with rules where they appear
 
@@ -71,32 +66,28 @@ Terminals, with rules where they appear
 -                    : 28
 /                    : 30
 <                    : 37
-=                    : 21 22 23
+=                    : 21 22 23 46 47 48
 >                    : 35
 AND                  : 39
-ARRAY                : 
 DO                   : 19
 EQ                   : 32
 IF                   : 17 18
-INPUT                : 
+INPUT                : 46 47 48
 LESSEQ               : 38
-MATRIX               : 
 MOREEQ               : 36
-NAME                 : 6 7 8 9 21 22 23 43 44 45 47
+NAME                 : 6 7 8 9 21 22 23 43 44 45 46 47 48 50
 NEQ                  : 33
-NOT                  : 
 NUM                  : 8 9 9 26
 OR                   : 40
 OTHERWISE            : 18
-PRINT                : 46 47
-READ                 : 
+PRINT                : 49 50
 REPEAT               : 20
 THEN                 : 17 18
 UNTIL                : 20
 VAR                  : 5 8 9
 WHILE                : 19
-[                    : 8 9 9 22 23 23 44 45 45
-]                    : 8 9 9 22 23 23 44 45 45
+[                    : 8 9 9 22 23 23 44 45 45 46 47 47
+]                    : 8 9 9 22 23 23 44 45 45 46 47 47
 error                : 
 {                    : 17 18 18 19 20
 }                    : 17 18 18 19 20
@@ -109,7 +100,7 @@ Codes                : 10 11
 Condition            : 17 18 19 20 24 42
 Conditions           : 12
 Decl                 : 3 4
-Expr                 : 21 22 22 23 23 23 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 35 35 36 36 37 37 38 38 39 39 40 40 41 44 45 45 46
+Expr                 : 21 22 22 23 23 23 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 35 35 36 36 37 37 38 38 39 39 40 40 41 44 45 45 46 47 47 49
 Header               : 1 3
 NameList             : 5 7
 Print                : 16
@@ -144,8 +135,11 @@ state 0
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     VAR             shift and go to state 6
     IF              shift and go to state 13
@@ -192,8 +186,11 @@ state 2
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     VAR             shift and go to state 6
     IF              shift and go to state 13
@@ -227,8 +224,11 @@ state 3
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     $end            reduce using rule 2 (Program -> Code .)
     IF              shift and go to state 13
@@ -286,6 +286,9 @@ state 7
     (21) Assign -> NAME . = Expr
     (22) Assign -> NAME . [ Expr ] = Expr
     (23) Assign -> NAME . [ Expr ] [ Expr ] = Expr
+    (46) Assign -> NAME . [ Expr ] = INPUT
+    (47) Assign -> NAME . [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> NAME . = INPUT
 
     =               shift and go to state 22
     [               shift and go to state 23
@@ -380,8 +383,8 @@ state 15
 
 state 16
 
-    (46) Print -> PRINT . Expr
-    (47) Print -> PRINT . NAME
+    (49) Print -> PRINT . Expr
+    (50) Print -> PRINT . NAME
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -430,8 +433,11 @@ state 17
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     $end            reduce using rule 1 (Program -> Header Code .)
     IF              shift and go to state 13
@@ -505,6 +511,7 @@ state 21
 state 22
 
     (21) Assign -> NAME = . Expr
+    (48) Assign -> NAME = . INPUT
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -528,6 +535,7 @@ state 22
     (44) Variable -> . NAME [ Expr ]
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
+    INPUT           shift and go to state 38
     NUM             shift and go to state 31
     (               shift and go to state 32
     !               shift and go to state 33
@@ -541,6 +549,8 @@ state 23
 
     (22) Assign -> NAME [ . Expr ] = Expr
     (23) Assign -> NAME [ . Expr ] [ Expr ] = Expr
+    (46) Assign -> NAME [ . Expr ] = INPUT
+    (47) Assign -> NAME [ . Expr ] [ Expr ] = INPUT
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -569,7 +579,7 @@ state 23
     !               shift and go to state 33
     NAME            shift and go to state 36
 
-    Expr                           shift and go to state 38
+    Expr                           shift and go to state 39
     Condition                      shift and go to state 29
     Variable                       shift and go to state 30
 
@@ -601,12 +611,12 @@ state 24
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
     !               shift and go to state 33
-    (               shift and go to state 39
+    (               shift and go to state 40
     NUM             shift and go to state 31
     NAME            shift and go to state 36
 
-    Condition                      shift and go to state 40
-    Expr                           shift and go to state 41
+    Condition                      shift and go to state 41
+    Expr                           shift and go to state 42
     Variable                       shift and go to state 30
 
 state 25
@@ -636,12 +646,12 @@ state 25
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
     !               shift and go to state 33
-    (               shift and go to state 39
+    (               shift and go to state 40
     NUM             shift and go to state 31
     NAME            shift and go to state 36
 
-    Condition                      shift and go to state 42
-    Expr                           shift and go to state 41
+    Condition                      shift and go to state 43
+    Expr                           shift and go to state 42
     Variable                       shift and go to state 30
 
 state 26
@@ -661,8 +671,11 @@ state 26
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     IF              shift and go to state 13
     WHILE           shift and go to state 14
@@ -670,7 +683,7 @@ state 26
     NAME            shift and go to state 7
     PRINT           shift and go to state 16
 
-    Code                           shift and go to state 43
+    Code                           shift and go to state 44
     Codes                          shift and go to state 5
     Conditions                     shift and go to state 8
     WhileDo                        shift and go to state 9
@@ -680,7 +693,7 @@ state 26
 
 state 27
 
-    (46) Print -> PRINT Expr .
+    (49) Print -> PRINT Expr .
     (27) Expr -> Expr . + Expr
     (28) Expr -> Expr . - Expr
     (29) Expr -> Expr . * Expr
@@ -695,31 +708,31 @@ state 27
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    IF              reduce using rule 46 (Print -> PRINT Expr .)
-    WHILE           reduce using rule 46 (Print -> PRINT Expr .)
-    REPEAT          reduce using rule 46 (Print -> PRINT Expr .)
-    NAME            reduce using rule 46 (Print -> PRINT Expr .)
-    PRINT           reduce using rule 46 (Print -> PRINT Expr .)
-    $end            reduce using rule 46 (Print -> PRINT Expr .)
-    }               reduce using rule 46 (Print -> PRINT Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    IF              reduce using rule 49 (Print -> PRINT Expr .)
+    WHILE           reduce using rule 49 (Print -> PRINT Expr .)
+    REPEAT          reduce using rule 49 (Print -> PRINT Expr .)
+    NAME            reduce using rule 49 (Print -> PRINT Expr .)
+    PRINT           reduce using rule 49 (Print -> PRINT Expr .)
+    $end            reduce using rule 49 (Print -> PRINT Expr .)
+    }               reduce using rule 49 (Print -> PRINT Expr .)
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
 state 28
 
-    (47) Print -> PRINT NAME .
+    (50) Print -> PRINT NAME .
     (43) Variable -> NAME .
     (44) Variable -> NAME . [ Expr ]
     (45) Variable -> NAME . [ Expr ] [ Expr ]
@@ -751,15 +764,15 @@ state 28
     PRINT           reduce using rule 43 (Variable -> NAME .)
     $end            reduce using rule 43 (Variable -> NAME .)
     }               reduce using rule 43 (Variable -> NAME .)
-    [               shift and go to state 57
+    [               shift and go to state 58
 
-  ! IF              [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! WHILE           [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! REPEAT          [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! NAME            [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! PRINT           [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! $end            [ reduce using rule 47 (Print -> PRINT NAME .) ]
-  ! }               [ reduce using rule 47 (Print -> PRINT NAME .) ]
+  ! IF              [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! WHILE           [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! REPEAT          [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! NAME            [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! PRINT           [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! $end            [ reduce using rule 50 (Print -> PRINT NAME .) ]
+  ! }               [ reduce using rule 50 (Print -> PRINT NAME .) ]
 
 
 state 29
@@ -878,8 +891,8 @@ state 32
     !               shift and go to state 33
     NAME            shift and go to state 36
 
-    Expr                           shift and go to state 58
-    Condition                      shift and go to state 59
+    Expr                           shift and go to state 59
+    Condition                      shift and go to state 60
     Variable                       shift and go to state 30
 
 state 33
@@ -913,7 +926,7 @@ state 33
     !               shift and go to state 33
     NAME            shift and go to state 36
 
-    Expr                           shift and go to state 60
+    Expr                           shift and go to state 61
     Condition                      shift and go to state 29
     Variable                       shift and go to state 30
 
@@ -921,7 +934,7 @@ state 34
 
     (7) NameList -> NameList , . NAME
 
-    NAME            shift and go to state 61
+    NAME            shift and go to state 62
 
 
 state 35
@@ -929,7 +942,7 @@ state 35
     (8) Decl -> VAR NAME [ . NUM ]
     (9) Decl -> VAR NAME [ . NUM ] [ NUM ]
 
-    NUM             shift and go to state 62
+    NUM             shift and go to state 63
 
 
 state 36
@@ -960,7 +973,7 @@ state 36
     }               reduce using rule 43 (Variable -> NAME .)
     ]               reduce using rule 43 (Variable -> NAME .)
     )               reduce using rule 43 (Variable -> NAME .)
-    [               shift and go to state 57
+    [               shift and go to state 58
 
 
 state 37
@@ -987,25 +1000,40 @@ state 37
     PRINT           reduce using rule 21 (Assign -> NAME = Expr .)
     $end            reduce using rule 21 (Assign -> NAME = Expr .)
     }               reduce using rule 21 (Assign -> NAME = Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
 state 38
 
+    (48) Assign -> NAME = INPUT .
+
+    IF              reduce using rule 48 (Assign -> NAME = INPUT .)
+    WHILE           reduce using rule 48 (Assign -> NAME = INPUT .)
+    REPEAT          reduce using rule 48 (Assign -> NAME = INPUT .)
+    NAME            reduce using rule 48 (Assign -> NAME = INPUT .)
+    PRINT           reduce using rule 48 (Assign -> NAME = INPUT .)
+    $end            reduce using rule 48 (Assign -> NAME = INPUT .)
+    }               reduce using rule 48 (Assign -> NAME = INPUT .)
+
+
+state 39
+
     (22) Assign -> NAME [ Expr . ] = Expr
     (23) Assign -> NAME [ Expr . ] [ Expr ] = Expr
+    (46) Assign -> NAME [ Expr . ] = INPUT
+    (47) Assign -> NAME [ Expr . ] [ Expr ] = INPUT
     (27) Expr -> Expr . + Expr
     (28) Expr -> Expr . - Expr
     (29) Expr -> Expr . * Expr
@@ -1020,23 +1048,23 @@ state 38
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    ]               shift and go to state 63
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    ]               shift and go to state 64
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 39
+state 40
 
     (42) Condition -> ( . Condition )
     (41) Expr -> ( . Expr )
@@ -1064,70 +1092,18 @@ state 39
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
     !               shift and go to state 33
-    (               shift and go to state 39
+    (               shift and go to state 40
     NUM             shift and go to state 31
     NAME            shift and go to state 36
 
-    Condition                      shift and go to state 59
-    Expr                           shift and go to state 64
+    Condition                      shift and go to state 60
+    Expr                           shift and go to state 65
     Variable                       shift and go to state 30
-
-state 40
-
-    (17) Conditions -> IF ( Condition . ) THEN { Code }
-    (18) Conditions -> IF ( Condition . ) THEN { Code } OTHERWISE { Code }
-    (24) Expr -> Condition .
-
-    )               shift and go to state 65
-    EQ              reduce using rule 24 (Expr -> Condition .)
-    NEQ             reduce using rule 24 (Expr -> Condition .)
-    >               reduce using rule 24 (Expr -> Condition .)
-    MOREEQ          reduce using rule 24 (Expr -> Condition .)
-    <               reduce using rule 24 (Expr -> Condition .)
-    LESSEQ          reduce using rule 24 (Expr -> Condition .)
-    AND             reduce using rule 24 (Expr -> Condition .)
-    OR              reduce using rule 24 (Expr -> Condition .)
-    +               reduce using rule 24 (Expr -> Condition .)
-    -               reduce using rule 24 (Expr -> Condition .)
-    *               reduce using rule 24 (Expr -> Condition .)
-    /               reduce using rule 24 (Expr -> Condition .)
-    %               reduce using rule 24 (Expr -> Condition .)
-
 
 state 41
 
-    (32) Condition -> Expr . EQ Expr
-    (33) Condition -> Expr . NEQ Expr
-    (35) Condition -> Expr . > Expr
-    (36) Condition -> Expr . MOREEQ Expr
-    (37) Condition -> Expr . < Expr
-    (38) Condition -> Expr . LESSEQ Expr
-    (39) Condition -> Expr . AND Expr
-    (40) Condition -> Expr . OR Expr
-    (27) Expr -> Expr . + Expr
-    (28) Expr -> Expr . - Expr
-    (29) Expr -> Expr . * Expr
-    (30) Expr -> Expr . / Expr
-    (31) Expr -> Expr . % Expr
-
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-
-
-state 42
-
-    (19) WhileDo -> WHILE ( Condition . ) DO { Code }
+    (17) Conditions -> IF ( Condition . ) THEN { Code }
+    (18) Conditions -> IF ( Condition . ) THEN { Code } OTHERWISE { Code }
     (24) Expr -> Condition .
 
     )               shift and go to state 66
@@ -1146,7 +1122,59 @@ state 42
     %               reduce using rule 24 (Expr -> Condition .)
 
 
+state 42
+
+    (32) Condition -> Expr . EQ Expr
+    (33) Condition -> Expr . NEQ Expr
+    (35) Condition -> Expr . > Expr
+    (36) Condition -> Expr . MOREEQ Expr
+    (37) Condition -> Expr . < Expr
+    (38) Condition -> Expr . LESSEQ Expr
+    (39) Condition -> Expr . AND Expr
+    (40) Condition -> Expr . OR Expr
+    (27) Expr -> Expr . + Expr
+    (28) Expr -> Expr . - Expr
+    (29) Expr -> Expr . * Expr
+    (30) Expr -> Expr . / Expr
+    (31) Expr -> Expr . % Expr
+
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+
+
 state 43
+
+    (19) WhileDo -> WHILE ( Condition . ) DO { Code }
+    (24) Expr -> Condition .
+
+    )               shift and go to state 67
+    EQ              reduce using rule 24 (Expr -> Condition .)
+    NEQ             reduce using rule 24 (Expr -> Condition .)
+    >               reduce using rule 24 (Expr -> Condition .)
+    MOREEQ          reduce using rule 24 (Expr -> Condition .)
+    <               reduce using rule 24 (Expr -> Condition .)
+    LESSEQ          reduce using rule 24 (Expr -> Condition .)
+    AND             reduce using rule 24 (Expr -> Condition .)
+    OR              reduce using rule 24 (Expr -> Condition .)
+    +               reduce using rule 24 (Expr -> Condition .)
+    -               reduce using rule 24 (Expr -> Condition .)
+    *               reduce using rule 24 (Expr -> Condition .)
+    /               reduce using rule 24 (Expr -> Condition .)
+    %               reduce using rule 24 (Expr -> Condition .)
+
+
+state 44
 
     (20) RepeatUntil -> REPEAT { Code . } UNTIL ( Condition )
     (10) Code -> Code . Codes
@@ -1162,10 +1190,13 @@ state 43
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
-    }               shift and go to state 67
+    }               shift and go to state 68
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     REPEAT          shift and go to state 15
@@ -1179,44 +1210,9 @@ state 43
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 44
-
-    (27) Expr -> Expr + . Expr
-    (24) Expr -> . Condition
-    (25) Expr -> . Variable
-    (26) Expr -> . NUM
-    (27) Expr -> . Expr + Expr
-    (28) Expr -> . Expr - Expr
-    (29) Expr -> . Expr * Expr
-    (30) Expr -> . Expr / Expr
-    (31) Expr -> . Expr % Expr
-    (41) Expr -> . ( Expr )
-    (32) Condition -> . Expr EQ Expr
-    (33) Condition -> . Expr NEQ Expr
-    (34) Condition -> . ! Expr
-    (35) Condition -> . Expr > Expr
-    (36) Condition -> . Expr MOREEQ Expr
-    (37) Condition -> . Expr < Expr
-    (38) Condition -> . Expr LESSEQ Expr
-    (39) Condition -> . Expr AND Expr
-    (40) Condition -> . Expr OR Expr
-    (42) Condition -> . ( Condition )
-    (43) Variable -> . NAME
-    (44) Variable -> . NAME [ Expr ]
-    (45) Variable -> . NAME [ Expr ] [ Expr ]
-
-    NUM             shift and go to state 31
-    (               shift and go to state 32
-    !               shift and go to state 33
-    NAME            shift and go to state 36
-
-    Expr                           shift and go to state 68
-    Condition                      shift and go to state 29
-    Variable                       shift and go to state 30
-
 state 45
 
-    (28) Expr -> Expr - . Expr
+    (27) Expr -> Expr + . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1251,7 +1247,7 @@ state 45
 
 state 46
 
-    (29) Expr -> Expr * . Expr
+    (28) Expr -> Expr - . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1286,7 +1282,7 @@ state 46
 
 state 47
 
-    (30) Expr -> Expr / . Expr
+    (29) Expr -> Expr * . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1321,7 +1317,7 @@ state 47
 
 state 48
 
-    (31) Expr -> Expr % . Expr
+    (30) Expr -> Expr / . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1356,7 +1352,7 @@ state 48
 
 state 49
 
-    (32) Condition -> Expr EQ . Expr
+    (31) Expr -> Expr % . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1391,7 +1387,7 @@ state 49
 
 state 50
 
-    (33) Condition -> Expr NEQ . Expr
+    (32) Condition -> Expr EQ . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1426,7 +1422,7 @@ state 50
 
 state 51
 
-    (35) Condition -> Expr > . Expr
+    (33) Condition -> Expr NEQ . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1461,7 +1457,7 @@ state 51
 
 state 52
 
-    (36) Condition -> Expr MOREEQ . Expr
+    (35) Condition -> Expr > . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1496,7 +1492,7 @@ state 52
 
 state 53
 
-    (37) Condition -> Expr < . Expr
+    (36) Condition -> Expr MOREEQ . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1531,7 +1527,7 @@ state 53
 
 state 54
 
-    (38) Condition -> Expr LESSEQ . Expr
+    (37) Condition -> Expr < . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1566,7 +1562,7 @@ state 54
 
 state 55
 
-    (39) Condition -> Expr AND . Expr
+    (38) Condition -> Expr LESSEQ . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1601,7 +1597,7 @@ state 55
 
 state 56
 
-    (40) Condition -> Expr OR . Expr
+    (39) Condition -> Expr AND . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1636,8 +1632,7 @@ state 56
 
 state 57
 
-    (44) Variable -> NAME [ . Expr ]
-    (45) Variable -> NAME [ . Expr ] [ Expr ]
+    (40) Condition -> Expr OR . Expr
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -1672,6 +1667,42 @@ state 57
 
 state 58
 
+    (44) Variable -> NAME [ . Expr ]
+    (45) Variable -> NAME [ . Expr ] [ Expr ]
+    (24) Expr -> . Condition
+    (25) Expr -> . Variable
+    (26) Expr -> . NUM
+    (27) Expr -> . Expr + Expr
+    (28) Expr -> . Expr - Expr
+    (29) Expr -> . Expr * Expr
+    (30) Expr -> . Expr / Expr
+    (31) Expr -> . Expr % Expr
+    (41) Expr -> . ( Expr )
+    (32) Condition -> . Expr EQ Expr
+    (33) Condition -> . Expr NEQ Expr
+    (34) Condition -> . ! Expr
+    (35) Condition -> . Expr > Expr
+    (36) Condition -> . Expr MOREEQ Expr
+    (37) Condition -> . Expr < Expr
+    (38) Condition -> . Expr LESSEQ Expr
+    (39) Condition -> . Expr AND Expr
+    (40) Condition -> . Expr OR Expr
+    (42) Condition -> . ( Condition )
+    (43) Variable -> . NAME
+    (44) Variable -> . NAME [ Expr ]
+    (45) Variable -> . NAME [ Expr ] [ Expr ]
+
+    NUM             shift and go to state 31
+    (               shift and go to state 32
+    !               shift and go to state 33
+    NAME            shift and go to state 36
+
+    Expr                           shift and go to state 82
+    Condition                      shift and go to state 29
+    Variable                       shift and go to state 30
+
+state 59
+
     (41) Expr -> ( Expr . )
     (27) Expr -> Expr . + Expr
     (28) Expr -> Expr . - Expr
@@ -1687,29 +1718,29 @@ state 58
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    )               shift and go to state 82
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    )               shift and go to state 83
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 59
+state 60
 
     (42) Condition -> ( Condition . )
     (24) Expr -> Condition .
 
   ! shift/reduce conflict for ) resolved as shift
-    )               shift and go to state 83
+    )               shift and go to state 84
     +               reduce using rule 24 (Expr -> Condition .)
     -               reduce using rule 24 (Expr -> Condition .)
     *               reduce using rule 24 (Expr -> Condition .)
@@ -1727,7 +1758,7 @@ state 59
   ! )               [ reduce using rule 24 (Expr -> Condition .) ]
 
 
-state 60
+state 61
 
     (34) Condition -> ! Expr .
     (27) Expr -> Expr . + Expr
@@ -1766,19 +1797,19 @@ state 60
     }               reduce using rule 34 (Condition -> ! Expr .)
     ]               reduce using rule 34 (Condition -> ! Expr .)
     )               reduce using rule 34 (Condition -> ! Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 34 (Condition -> ! Expr .) ]
   ! -               [ reduce using rule 34 (Condition -> ! Expr .) ]
@@ -1795,7 +1826,7 @@ state 60
   ! OR              [ reduce using rule 34 (Condition -> ! Expr .) ]
 
 
-state 61
+state 62
 
     (7) NameList -> NameList , NAME .
 
@@ -1808,24 +1839,26 @@ state 61
     PRINT           reduce using rule 7 (NameList -> NameList , NAME .)
 
 
-state 62
+state 63
 
     (8) Decl -> VAR NAME [ NUM . ]
     (9) Decl -> VAR NAME [ NUM . ] [ NUM ]
 
-    ]               shift and go to state 84
-
-
-state 63
-
-    (22) Assign -> NAME [ Expr ] . = Expr
-    (23) Assign -> NAME [ Expr ] . [ Expr ] = Expr
-
-    =               shift and go to state 86
-    [               shift and go to state 85
+    ]               shift and go to state 85
 
 
 state 64
+
+    (22) Assign -> NAME [ Expr ] . = Expr
+    (23) Assign -> NAME [ Expr ] . [ Expr ] = Expr
+    (46) Assign -> NAME [ Expr ] . = INPUT
+    (47) Assign -> NAME [ Expr ] . [ Expr ] = INPUT
+
+    =               shift and go to state 87
+    [               shift and go to state 86
+
+
+state 65
 
     (41) Expr -> ( Expr . )
     (32) Condition -> Expr . EQ Expr
@@ -1842,45 +1875,45 @@ state 64
     (30) Expr -> Expr . / Expr
     (31) Expr -> Expr . % Expr
 
-    )               shift and go to state 82
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-
-
-state 65
-
-    (17) Conditions -> IF ( Condition ) . THEN { Code }
-    (18) Conditions -> IF ( Condition ) . THEN { Code } OTHERWISE { Code }
-
-    THEN            shift and go to state 87
+    )               shift and go to state 83
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
 
 
 state 66
 
-    (19) WhileDo -> WHILE ( Condition ) . DO { Code }
+    (17) Conditions -> IF ( Condition ) . THEN { Code }
+    (18) Conditions -> IF ( Condition ) . THEN { Code } OTHERWISE { Code }
 
-    DO              shift and go to state 88
+    THEN            shift and go to state 88
 
 
 state 67
 
-    (20) RepeatUntil -> REPEAT { Code } . UNTIL ( Condition )
+    (19) WhileDo -> WHILE ( Condition ) . DO { Code }
 
-    UNTIL           shift and go to state 89
+    DO              shift and go to state 89
 
 
 state 68
+
+    (20) RepeatUntil -> REPEAT { Code } . UNTIL ( Condition )
+
+    UNTIL           shift and go to state 90
+
+
+state 69
 
     (27) Expr -> Expr + Expr .
     (27) Expr -> Expr . + Expr
@@ -1919,19 +1952,19 @@ state 68
     }               reduce using rule 27 (Expr -> Expr + Expr .)
     ]               reduce using rule 27 (Expr -> Expr + Expr .)
     )               reduce using rule 27 (Expr -> Expr + Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 27 (Expr -> Expr + Expr .) ]
   ! -               [ reduce using rule 27 (Expr -> Expr + Expr .) ]
@@ -1948,7 +1981,7 @@ state 68
   ! OR              [ reduce using rule 27 (Expr -> Expr + Expr .) ]
 
 
-state 69
+state 70
 
     (28) Expr -> Expr - Expr .
     (27) Expr -> Expr . + Expr
@@ -1987,19 +2020,19 @@ state 69
     }               reduce using rule 28 (Expr -> Expr - Expr .)
     ]               reduce using rule 28 (Expr -> Expr - Expr .)
     )               reduce using rule 28 (Expr -> Expr - Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 28 (Expr -> Expr - Expr .) ]
   ! -               [ reduce using rule 28 (Expr -> Expr - Expr .) ]
@@ -2016,7 +2049,7 @@ state 69
   ! OR              [ reduce using rule 28 (Expr -> Expr - Expr .) ]
 
 
-state 70
+state 71
 
     (29) Expr -> Expr * Expr .
     (27) Expr -> Expr . + Expr
@@ -2055,19 +2088,19 @@ state 70
     }               reduce using rule 29 (Expr -> Expr * Expr .)
     ]               reduce using rule 29 (Expr -> Expr * Expr .)
     )               reduce using rule 29 (Expr -> Expr * Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 29 (Expr -> Expr * Expr .) ]
   ! -               [ reduce using rule 29 (Expr -> Expr * Expr .) ]
@@ -2084,7 +2117,7 @@ state 70
   ! OR              [ reduce using rule 29 (Expr -> Expr * Expr .) ]
 
 
-state 71
+state 72
 
     (30) Expr -> Expr / Expr .
     (27) Expr -> Expr . + Expr
@@ -2123,19 +2156,19 @@ state 71
     }               reduce using rule 30 (Expr -> Expr / Expr .)
     ]               reduce using rule 30 (Expr -> Expr / Expr .)
     )               reduce using rule 30 (Expr -> Expr / Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 30 (Expr -> Expr / Expr .) ]
   ! -               [ reduce using rule 30 (Expr -> Expr / Expr .) ]
@@ -2152,7 +2185,7 @@ state 71
   ! OR              [ reduce using rule 30 (Expr -> Expr / Expr .) ]
 
 
-state 72
+state 73
 
     (31) Expr -> Expr % Expr .
     (27) Expr -> Expr . + Expr
@@ -2191,19 +2224,19 @@ state 72
     }               reduce using rule 31 (Expr -> Expr % Expr .)
     ]               reduce using rule 31 (Expr -> Expr % Expr .)
     )               reduce using rule 31 (Expr -> Expr % Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 31 (Expr -> Expr % Expr .) ]
   ! -               [ reduce using rule 31 (Expr -> Expr % Expr .) ]
@@ -2220,7 +2253,7 @@ state 72
   ! OR              [ reduce using rule 31 (Expr -> Expr % Expr .) ]
 
 
-state 73
+state 74
 
     (32) Condition -> Expr EQ Expr .
     (27) Expr -> Expr . + Expr
@@ -2259,19 +2292,19 @@ state 73
     }               reduce using rule 32 (Condition -> Expr EQ Expr .)
     ]               reduce using rule 32 (Condition -> Expr EQ Expr .)
     )               reduce using rule 32 (Condition -> Expr EQ Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 32 (Condition -> Expr EQ Expr .) ]
   ! -               [ reduce using rule 32 (Condition -> Expr EQ Expr .) ]
@@ -2288,7 +2321,7 @@ state 73
   ! OR              [ reduce using rule 32 (Condition -> Expr EQ Expr .) ]
 
 
-state 74
+state 75
 
     (33) Condition -> Expr NEQ Expr .
     (27) Expr -> Expr . + Expr
@@ -2327,19 +2360,19 @@ state 74
     }               reduce using rule 33 (Condition -> Expr NEQ Expr .)
     ]               reduce using rule 33 (Condition -> Expr NEQ Expr .)
     )               reduce using rule 33 (Condition -> Expr NEQ Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 33 (Condition -> Expr NEQ Expr .) ]
   ! -               [ reduce using rule 33 (Condition -> Expr NEQ Expr .) ]
@@ -2356,7 +2389,7 @@ state 74
   ! OR              [ reduce using rule 33 (Condition -> Expr NEQ Expr .) ]
 
 
-state 75
+state 76
 
     (35) Condition -> Expr > Expr .
     (27) Expr -> Expr . + Expr
@@ -2395,19 +2428,19 @@ state 75
     }               reduce using rule 35 (Condition -> Expr > Expr .)
     ]               reduce using rule 35 (Condition -> Expr > Expr .)
     )               reduce using rule 35 (Condition -> Expr > Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 35 (Condition -> Expr > Expr .) ]
   ! -               [ reduce using rule 35 (Condition -> Expr > Expr .) ]
@@ -2424,7 +2457,7 @@ state 75
   ! OR              [ reduce using rule 35 (Condition -> Expr > Expr .) ]
 
 
-state 76
+state 77
 
     (36) Condition -> Expr MOREEQ Expr .
     (27) Expr -> Expr . + Expr
@@ -2463,19 +2496,19 @@ state 76
     }               reduce using rule 36 (Condition -> Expr MOREEQ Expr .)
     ]               reduce using rule 36 (Condition -> Expr MOREEQ Expr .)
     )               reduce using rule 36 (Condition -> Expr MOREEQ Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 36 (Condition -> Expr MOREEQ Expr .) ]
   ! -               [ reduce using rule 36 (Condition -> Expr MOREEQ Expr .) ]
@@ -2492,7 +2525,7 @@ state 76
   ! OR              [ reduce using rule 36 (Condition -> Expr MOREEQ Expr .) ]
 
 
-state 77
+state 78
 
     (37) Condition -> Expr < Expr .
     (27) Expr -> Expr . + Expr
@@ -2531,19 +2564,19 @@ state 77
     }               reduce using rule 37 (Condition -> Expr < Expr .)
     ]               reduce using rule 37 (Condition -> Expr < Expr .)
     )               reduce using rule 37 (Condition -> Expr < Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 37 (Condition -> Expr < Expr .) ]
   ! -               [ reduce using rule 37 (Condition -> Expr < Expr .) ]
@@ -2560,7 +2593,7 @@ state 77
   ! OR              [ reduce using rule 37 (Condition -> Expr < Expr .) ]
 
 
-state 78
+state 79
 
     (38) Condition -> Expr LESSEQ Expr .
     (27) Expr -> Expr . + Expr
@@ -2599,19 +2632,19 @@ state 78
     }               reduce using rule 38 (Condition -> Expr LESSEQ Expr .)
     ]               reduce using rule 38 (Condition -> Expr LESSEQ Expr .)
     )               reduce using rule 38 (Condition -> Expr LESSEQ Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 38 (Condition -> Expr LESSEQ Expr .) ]
   ! -               [ reduce using rule 38 (Condition -> Expr LESSEQ Expr .) ]
@@ -2628,7 +2661,7 @@ state 78
   ! OR              [ reduce using rule 38 (Condition -> Expr LESSEQ Expr .) ]
 
 
-state 79
+state 80
 
     (39) Condition -> Expr AND Expr .
     (27) Expr -> Expr . + Expr
@@ -2667,19 +2700,19 @@ state 79
     }               reduce using rule 39 (Condition -> Expr AND Expr .)
     ]               reduce using rule 39 (Condition -> Expr AND Expr .)
     )               reduce using rule 39 (Condition -> Expr AND Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 39 (Condition -> Expr AND Expr .) ]
   ! -               [ reduce using rule 39 (Condition -> Expr AND Expr .) ]
@@ -2696,7 +2729,7 @@ state 79
   ! OR              [ reduce using rule 39 (Condition -> Expr AND Expr .) ]
 
 
-state 80
+state 81
 
     (40) Condition -> Expr OR Expr .
     (27) Expr -> Expr . + Expr
@@ -2735,19 +2768,19 @@ state 80
     }               reduce using rule 40 (Condition -> Expr OR Expr .)
     ]               reduce using rule 40 (Condition -> Expr OR Expr .)
     )               reduce using rule 40 (Condition -> Expr OR Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
   ! +               [ reduce using rule 40 (Condition -> Expr OR Expr .) ]
   ! -               [ reduce using rule 40 (Condition -> Expr OR Expr .) ]
@@ -2764,7 +2797,7 @@ state 80
   ! OR              [ reduce using rule 40 (Condition -> Expr OR Expr .) ]
 
 
-state 81
+state 82
 
     (44) Variable -> NAME [ Expr . ]
     (45) Variable -> NAME [ Expr . ] [ Expr ]
@@ -2782,23 +2815,23 @@ state 81
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    ]               shift and go to state 90
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    ]               shift and go to state 91
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 82
+state 83
 
     (41) Expr -> ( Expr ) .
 
@@ -2826,7 +2859,7 @@ state 82
     )               reduce using rule 41 (Expr -> ( Expr ) .)
 
 
-state 83
+state 84
 
     (42) Condition -> ( Condition ) .
 
@@ -2854,7 +2887,7 @@ state 83
     )               reduce using rule 42 (Condition -> ( Condition ) .)
 
 
-state 84
+state 85
 
     (8) Decl -> VAR NAME [ NUM ] .
     (9) Decl -> VAR NAME [ NUM ] . [ NUM ]
@@ -2865,47 +2898,13 @@ state 84
     REPEAT          reduce using rule 8 (Decl -> VAR NAME [ NUM ] .)
     NAME            reduce using rule 8 (Decl -> VAR NAME [ NUM ] .)
     PRINT           reduce using rule 8 (Decl -> VAR NAME [ NUM ] .)
-    [               shift and go to state 91
+    [               shift and go to state 92
 
-
-state 85
-
-    (23) Assign -> NAME [ Expr ] [ . Expr ] = Expr
-    (24) Expr -> . Condition
-    (25) Expr -> . Variable
-    (26) Expr -> . NUM
-    (27) Expr -> . Expr + Expr
-    (28) Expr -> . Expr - Expr
-    (29) Expr -> . Expr * Expr
-    (30) Expr -> . Expr / Expr
-    (31) Expr -> . Expr % Expr
-    (41) Expr -> . ( Expr )
-    (32) Condition -> . Expr EQ Expr
-    (33) Condition -> . Expr NEQ Expr
-    (34) Condition -> . ! Expr
-    (35) Condition -> . Expr > Expr
-    (36) Condition -> . Expr MOREEQ Expr
-    (37) Condition -> . Expr < Expr
-    (38) Condition -> . Expr LESSEQ Expr
-    (39) Condition -> . Expr AND Expr
-    (40) Condition -> . Expr OR Expr
-    (42) Condition -> . ( Condition )
-    (43) Variable -> . NAME
-    (44) Variable -> . NAME [ Expr ]
-    (45) Variable -> . NAME [ Expr ] [ Expr ]
-
-    NUM             shift and go to state 31
-    (               shift and go to state 32
-    !               shift and go to state 33
-    NAME            shift and go to state 36
-
-    Expr                           shift and go to state 92
-    Condition                      shift and go to state 29
-    Variable                       shift and go to state 30
 
 state 86
 
-    (22) Assign -> NAME [ Expr ] = . Expr
+    (23) Assign -> NAME [ Expr ] [ . Expr ] = Expr
+    (47) Assign -> NAME [ Expr ] [ . Expr ] = INPUT
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -2940,27 +2939,64 @@ state 86
 
 state 87
 
-    (17) Conditions -> IF ( Condition ) THEN . { Code }
-    (18) Conditions -> IF ( Condition ) THEN . { Code } OTHERWISE { Code }
+    (22) Assign -> NAME [ Expr ] = . Expr
+    (46) Assign -> NAME [ Expr ] = . INPUT
+    (24) Expr -> . Condition
+    (25) Expr -> . Variable
+    (26) Expr -> . NUM
+    (27) Expr -> . Expr + Expr
+    (28) Expr -> . Expr - Expr
+    (29) Expr -> . Expr * Expr
+    (30) Expr -> . Expr / Expr
+    (31) Expr -> . Expr % Expr
+    (41) Expr -> . ( Expr )
+    (32) Condition -> . Expr EQ Expr
+    (33) Condition -> . Expr NEQ Expr
+    (34) Condition -> . ! Expr
+    (35) Condition -> . Expr > Expr
+    (36) Condition -> . Expr MOREEQ Expr
+    (37) Condition -> . Expr < Expr
+    (38) Condition -> . Expr LESSEQ Expr
+    (39) Condition -> . Expr AND Expr
+    (40) Condition -> . Expr OR Expr
+    (42) Condition -> . ( Condition )
+    (43) Variable -> . NAME
+    (44) Variable -> . NAME [ Expr ]
+    (45) Variable -> . NAME [ Expr ] [ Expr ]
 
-    {               shift and go to state 94
+    INPUT           shift and go to state 95
+    NUM             shift and go to state 31
+    (               shift and go to state 32
+    !               shift and go to state 33
+    NAME            shift and go to state 36
 
+    Expr                           shift and go to state 94
+    Condition                      shift and go to state 29
+    Variable                       shift and go to state 30
 
 state 88
 
-    (19) WhileDo -> WHILE ( Condition ) DO . { Code }
+    (17) Conditions -> IF ( Condition ) THEN . { Code }
+    (18) Conditions -> IF ( Condition ) THEN . { Code } OTHERWISE { Code }
 
-    {               shift and go to state 95
+    {               shift and go to state 96
 
 
 state 89
 
-    (20) RepeatUntil -> REPEAT { Code } UNTIL . ( Condition )
+    (19) WhileDo -> WHILE ( Condition ) DO . { Code }
 
-    (               shift and go to state 96
+    {               shift and go to state 97
 
 
 state 90
+
+    (20) RepeatUntil -> REPEAT { Code } UNTIL . ( Condition )
+
+    (               shift and go to state 98
+
+
+state 91
 
     (44) Variable -> NAME [ Expr ] .
     (45) Variable -> NAME [ Expr ] . [ Expr ]
@@ -2987,19 +3023,20 @@ state 90
     }               reduce using rule 44 (Variable -> NAME [ Expr ] .)
     ]               reduce using rule 44 (Variable -> NAME [ Expr ] .)
     )               reduce using rule 44 (Variable -> NAME [ Expr ] .)
-    [               shift and go to state 97
-
-
-state 91
-
-    (9) Decl -> VAR NAME [ NUM ] [ . NUM ]
-
-    NUM             shift and go to state 98
+    [               shift and go to state 99
 
 
 state 92
 
+    (9) Decl -> VAR NAME [ NUM ] [ . NUM ]
+
+    NUM             shift and go to state 100
+
+
+state 93
+
     (23) Assign -> NAME [ Expr ] [ Expr . ] = Expr
+    (47) Assign -> NAME [ Expr ] [ Expr . ] = INPUT
     (27) Expr -> Expr . + Expr
     (28) Expr -> Expr . - Expr
     (29) Expr -> Expr . * Expr
@@ -3014,23 +3051,23 @@ state 92
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    ]               shift and go to state 99
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    ]               shift and go to state 101
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 93
+state 94
 
     (22) Assign -> NAME [ Expr ] = Expr .
     (27) Expr -> Expr . + Expr
@@ -3054,22 +3091,35 @@ state 93
     PRINT           reduce using rule 22 (Assign -> NAME [ Expr ] = Expr .)
     $end            reduce using rule 22 (Assign -> NAME [ Expr ] = Expr .)
     }               reduce using rule 22 (Assign -> NAME [ Expr ] = Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 94
+state 95
+
+    (46) Assign -> NAME [ Expr ] = INPUT .
+
+    IF              reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    WHILE           reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    REPEAT          reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    NAME            reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    PRINT           reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    $end            reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+    }               reduce using rule 46 (Assign -> NAME [ Expr ] = INPUT .)
+
+
+state 96
 
     (17) Conditions -> IF ( Condition ) THEN { . Code }
     (18) Conditions -> IF ( Condition ) THEN { . Code } OTHERWISE { Code }
@@ -3087,8 +3137,11 @@ state 94
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     IF              shift and go to state 13
     WHILE           shift and go to state 14
@@ -3096,7 +3149,7 @@ state 94
     NAME            shift and go to state 7
     PRINT           shift and go to state 16
 
-    Code                           shift and go to state 100
+    Code                           shift and go to state 102
     Codes                          shift and go to state 5
     Conditions                     shift and go to state 8
     WhileDo                        shift and go to state 9
@@ -3104,7 +3157,7 @@ state 94
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 95
+state 97
 
     (19) WhileDo -> WHILE ( Condition ) DO { . Code }
     (10) Code -> . Code Codes
@@ -3121,8 +3174,11 @@ state 95
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     IF              shift and go to state 13
     WHILE           shift and go to state 14
@@ -3130,7 +3186,7 @@ state 95
     NAME            shift and go to state 7
     PRINT           shift and go to state 16
 
-    Code                           shift and go to state 101
+    Code                           shift and go to state 103
     Codes                          shift and go to state 5
     Conditions                     shift and go to state 8
     WhileDo                        shift and go to state 9
@@ -3138,7 +3194,7 @@ state 95
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 96
+state 98
 
     (20) RepeatUntil -> REPEAT { Code } UNTIL ( . Condition )
     (32) Condition -> . Expr EQ Expr
@@ -3165,15 +3221,15 @@ state 96
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
     !               shift and go to state 33
-    (               shift and go to state 39
+    (               shift and go to state 40
     NUM             shift and go to state 31
     NAME            shift and go to state 36
 
-    Condition                      shift and go to state 102
-    Expr                           shift and go to state 41
+    Condition                      shift and go to state 104
+    Expr                           shift and go to state 42
     Variable                       shift and go to state 30
 
-state 97
+state 99
 
     (45) Variable -> NAME [ Expr ] [ . Expr ]
     (24) Expr -> . Condition
@@ -3204,25 +3260,26 @@ state 97
     !               shift and go to state 33
     NAME            shift and go to state 36
 
-    Expr                           shift and go to state 103
+    Expr                           shift and go to state 105
     Condition                      shift and go to state 29
     Variable                       shift and go to state 30
 
-state 98
+state 100
 
     (9) Decl -> VAR NAME [ NUM ] [ NUM . ]
 
-    ]               shift and go to state 104
+    ]               shift and go to state 106
 
 
-state 99
+state 101
 
     (23) Assign -> NAME [ Expr ] [ Expr ] . = Expr
+    (47) Assign -> NAME [ Expr ] [ Expr ] . = INPUT
 
-    =               shift and go to state 105
+    =               shift and go to state 107
 
 
-state 100
+state 102
 
     (17) Conditions -> IF ( Condition ) THEN { Code . }
     (18) Conditions -> IF ( Condition ) THEN { Code . } OTHERWISE { Code }
@@ -3239,10 +3296,13 @@ state 100
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
-    }               shift and go to state 106
+    }               shift and go to state 108
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     REPEAT          shift and go to state 15
@@ -3256,7 +3316,7 @@ state 100
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 101
+state 103
 
     (19) WhileDo -> WHILE ( Condition ) DO { Code . }
     (10) Code -> Code . Codes
@@ -3272,10 +3332,13 @@ state 101
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
-    }               shift and go to state 107
+    }               shift and go to state 109
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     REPEAT          shift and go to state 15
@@ -3289,12 +3352,12 @@ state 101
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 102
+state 104
 
     (20) RepeatUntil -> REPEAT { Code } UNTIL ( Condition . )
     (24) Expr -> Condition .
 
-    )               shift and go to state 108
+    )               shift and go to state 110
     EQ              reduce using rule 24 (Expr -> Condition .)
     NEQ             reduce using rule 24 (Expr -> Condition .)
     >               reduce using rule 24 (Expr -> Condition .)
@@ -3310,7 +3373,7 @@ state 102
     %               reduce using rule 24 (Expr -> Condition .)
 
 
-state 103
+state 105
 
     (45) Variable -> NAME [ Expr ] [ Expr . ]
     (27) Expr -> Expr . + Expr
@@ -3327,23 +3390,23 @@ state 103
     (39) Condition -> Expr . AND Expr
     (40) Condition -> Expr . OR Expr
 
-    ]               shift and go to state 109
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    ]               shift and go to state 111
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 104
+state 106
 
     (9) Decl -> VAR NAME [ NUM ] [ NUM ] .
 
@@ -3355,9 +3418,10 @@ state 104
     PRINT           reduce using rule 9 (Decl -> VAR NAME [ NUM ] [ NUM ] .)
 
 
-state 105
+state 107
 
     (23) Assign -> NAME [ Expr ] [ Expr ] = . Expr
+    (47) Assign -> NAME [ Expr ] [ Expr ] = . INPUT
     (24) Expr -> . Condition
     (25) Expr -> . Variable
     (26) Expr -> . NUM
@@ -3381,16 +3445,17 @@ state 105
     (44) Variable -> . NAME [ Expr ]
     (45) Variable -> . NAME [ Expr ] [ Expr ]
 
+    INPUT           shift and go to state 113
     NUM             shift and go to state 31
     (               shift and go to state 32
     !               shift and go to state 33
     NAME            shift and go to state 36
 
-    Expr                           shift and go to state 110
+    Expr                           shift and go to state 112
     Condition                      shift and go to state 29
     Variable                       shift and go to state 30
 
-state 106
+state 108
 
     (17) Conditions -> IF ( Condition ) THEN { Code } .
     (18) Conditions -> IF ( Condition ) THEN { Code } . OTHERWISE { Code }
@@ -3402,10 +3467,10 @@ state 106
     PRINT           reduce using rule 17 (Conditions -> IF ( Condition ) THEN { Code } .)
     $end            reduce using rule 17 (Conditions -> IF ( Condition ) THEN { Code } .)
     }               reduce using rule 17 (Conditions -> IF ( Condition ) THEN { Code } .)
-    OTHERWISE       shift and go to state 111
+    OTHERWISE       shift and go to state 114
 
 
-state 107
+state 109
 
     (19) WhileDo -> WHILE ( Condition ) DO { Code } .
 
@@ -3418,7 +3483,7 @@ state 107
     }               reduce using rule 19 (WhileDo -> WHILE ( Condition ) DO { Code } .)
 
 
-state 108
+state 110
 
     (20) RepeatUntil -> REPEAT { Code } UNTIL ( Condition ) .
 
@@ -3431,7 +3496,7 @@ state 108
     }               reduce using rule 20 (RepeatUntil -> REPEAT { Code } UNTIL ( Condition ) .)
 
 
-state 109
+state 111
 
     (45) Variable -> NAME [ Expr ] [ Expr ] .
 
@@ -3459,7 +3524,7 @@ state 109
     )               reduce using rule 45 (Variable -> NAME [ Expr ] [ Expr ] .)
 
 
-state 110
+state 112
 
     (23) Assign -> NAME [ Expr ] [ Expr ] = Expr .
     (27) Expr -> Expr . + Expr
@@ -3483,29 +3548,42 @@ state 110
     PRINT           reduce using rule 23 (Assign -> NAME [ Expr ] [ Expr ] = Expr .)
     $end            reduce using rule 23 (Assign -> NAME [ Expr ] [ Expr ] = Expr .)
     }               reduce using rule 23 (Assign -> NAME [ Expr ] [ Expr ] = Expr .)
-    +               shift and go to state 44
-    -               shift and go to state 45
-    *               shift and go to state 46
-    /               shift and go to state 47
-    %               shift and go to state 48
-    EQ              shift and go to state 49
-    NEQ             shift and go to state 50
-    >               shift and go to state 51
-    MOREEQ          shift and go to state 52
-    <               shift and go to state 53
-    LESSEQ          shift and go to state 54
-    AND             shift and go to state 55
-    OR              shift and go to state 56
+    +               shift and go to state 45
+    -               shift and go to state 46
+    *               shift and go to state 47
+    /               shift and go to state 48
+    %               shift and go to state 49
+    EQ              shift and go to state 50
+    NEQ             shift and go to state 51
+    >               shift and go to state 52
+    MOREEQ          shift and go to state 53
+    <               shift and go to state 54
+    LESSEQ          shift and go to state 55
+    AND             shift and go to state 56
+    OR              shift and go to state 57
 
 
-state 111
+state 113
+
+    (47) Assign -> NAME [ Expr ] [ Expr ] = INPUT .
+
+    IF              reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    WHILE           reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    REPEAT          reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    NAME            reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    PRINT           reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    $end            reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+    }               reduce using rule 47 (Assign -> NAME [ Expr ] [ Expr ] = INPUT .)
+
+
+state 114
 
     (18) Conditions -> IF ( Condition ) THEN { Code } OTHERWISE . { Code }
 
-    {               shift and go to state 112
+    {               shift and go to state 115
 
 
-state 112
+state 115
 
     (18) Conditions -> IF ( Condition ) THEN { Code } OTHERWISE { . Code }
     (10) Code -> . Code Codes
@@ -3522,8 +3600,11 @@ state 112
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
     IF              shift and go to state 13
     WHILE           shift and go to state 14
@@ -3531,7 +3612,7 @@ state 112
     NAME            shift and go to state 7
     PRINT           shift and go to state 16
 
-    Code                           shift and go to state 113
+    Code                           shift and go to state 116
     Codes                          shift and go to state 5
     Conditions                     shift and go to state 8
     WhileDo                        shift and go to state 9
@@ -3539,7 +3620,7 @@ state 112
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 113
+state 116
 
     (18) Conditions -> IF ( Condition ) THEN { Code } OTHERWISE { Code . }
     (10) Code -> Code . Codes
@@ -3555,10 +3636,13 @@ state 113
     (21) Assign -> . NAME = Expr
     (22) Assign -> . NAME [ Expr ] = Expr
     (23) Assign -> . NAME [ Expr ] [ Expr ] = Expr
-    (46) Print -> . PRINT Expr
-    (47) Print -> . PRINT NAME
+    (46) Assign -> . NAME [ Expr ] = INPUT
+    (47) Assign -> . NAME [ Expr ] [ Expr ] = INPUT
+    (48) Assign -> . NAME = INPUT
+    (49) Print -> . PRINT Expr
+    (50) Print -> . PRINT NAME
 
-    }               shift and go to state 114
+    }               shift and go to state 117
     IF              shift and go to state 13
     WHILE           shift and go to state 14
     REPEAT          shift and go to state 15
@@ -3572,7 +3656,7 @@ state 113
     Assign                         shift and go to state 11
     Print                          shift and go to state 12
 
-state 114
+state 117
 
     (18) Conditions -> IF ( Condition ) THEN { Code } OTHERWISE { Code } .
 
@@ -3587,33 +3671,20 @@ state 114
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ) in state 59 resolved as shift
-WARNING: shift/reduce conflict for + in state 60 resolved as shift
-WARNING: shift/reduce conflict for - in state 60 resolved as shift
-WARNING: shift/reduce conflict for * in state 60 resolved as shift
-WARNING: shift/reduce conflict for / in state 60 resolved as shift
-WARNING: shift/reduce conflict for % in state 60 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 60 resolved as shift
-WARNING: shift/reduce conflict for NEQ in state 60 resolved as shift
-WARNING: shift/reduce conflict for > in state 60 resolved as shift
-WARNING: shift/reduce conflict for MOREEQ in state 60 resolved as shift
-WARNING: shift/reduce conflict for < in state 60 resolved as shift
-WARNING: shift/reduce conflict for LESSEQ in state 60 resolved as shift
-WARNING: shift/reduce conflict for AND in state 60 resolved as shift
-WARNING: shift/reduce conflict for OR in state 60 resolved as shift
-WARNING: shift/reduce conflict for + in state 68 resolved as shift
-WARNING: shift/reduce conflict for - in state 68 resolved as shift
-WARNING: shift/reduce conflict for * in state 68 resolved as shift
-WARNING: shift/reduce conflict for / in state 68 resolved as shift
-WARNING: shift/reduce conflict for % in state 68 resolved as shift
-WARNING: shift/reduce conflict for EQ in state 68 resolved as shift
-WARNING: shift/reduce conflict for NEQ in state 68 resolved as shift
-WARNING: shift/reduce conflict for > in state 68 resolved as shift
-WARNING: shift/reduce conflict for MOREEQ in state 68 resolved as shift
-WARNING: shift/reduce conflict for < in state 68 resolved as shift
-WARNING: shift/reduce conflict for LESSEQ in state 68 resolved as shift
-WARNING: shift/reduce conflict for AND in state 68 resolved as shift
-WARNING: shift/reduce conflict for OR in state 68 resolved as shift
+WARNING: shift/reduce conflict for ) in state 60 resolved as shift
+WARNING: shift/reduce conflict for + in state 61 resolved as shift
+WARNING: shift/reduce conflict for - in state 61 resolved as shift
+WARNING: shift/reduce conflict for * in state 61 resolved as shift
+WARNING: shift/reduce conflict for / in state 61 resolved as shift
+WARNING: shift/reduce conflict for % in state 61 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for > in state 61 resolved as shift
+WARNING: shift/reduce conflict for MOREEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for < in state 61 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 61 resolved as shift
+WARNING: shift/reduce conflict for AND in state 61 resolved as shift
+WARNING: shift/reduce conflict for OR in state 61 resolved as shift
 WARNING: shift/reduce conflict for + in state 69 resolved as shift
 WARNING: shift/reduce conflict for - in state 69 resolved as shift
 WARNING: shift/reduce conflict for * in state 69 resolved as shift
@@ -3770,6 +3841,19 @@ WARNING: shift/reduce conflict for < in state 80 resolved as shift
 WARNING: shift/reduce conflict for LESSEQ in state 80 resolved as shift
 WARNING: shift/reduce conflict for AND in state 80 resolved as shift
 WARNING: shift/reduce conflict for OR in state 80 resolved as shift
+WARNING: shift/reduce conflict for + in state 81 resolved as shift
+WARNING: shift/reduce conflict for - in state 81 resolved as shift
+WARNING: shift/reduce conflict for * in state 81 resolved as shift
+WARNING: shift/reduce conflict for / in state 81 resolved as shift
+WARNING: shift/reduce conflict for % in state 81 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 81 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 81 resolved as shift
+WARNING: shift/reduce conflict for > in state 81 resolved as shift
+WARNING: shift/reduce conflict for MOREEQ in state 81 resolved as shift
+WARNING: shift/reduce conflict for < in state 81 resolved as shift
+WARNING: shift/reduce conflict for LESSEQ in state 81 resolved as shift
+WARNING: shift/reduce conflict for AND in state 81 resolved as shift
+WARNING: shift/reduce conflict for OR in state 81 resolved as shift
 WARNING: reduce/reduce conflict in state 28 resolved using rule (Variable -> NAME)
 WARNING: rejected rule (Print -> PRINT NAME) in state 28
 WARNING: Rule (Print -> PRINT NAME) is never reduced

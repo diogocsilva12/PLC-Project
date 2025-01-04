@@ -2,9 +2,9 @@ var x
 var y
 var result
 
-x = READ
-y = READ
+x = input
+y = input
 
 result = x + y
 
-print(result)
+print result

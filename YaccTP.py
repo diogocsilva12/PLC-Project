@@ -22,6 +22,7 @@ se o programa consiste num cabeçalho opcional seguido pelo código principal. A
 #   var a, b
 #   a = 5
 #   STOP
+
 def p_Program(p):
     "Program : Header Code"
     p[0] = p[1] + "START\n" + p[2] + "STOP\n"
@@ -41,10 +42,12 @@ responsavel por alocar espaço na memória para as variáveis declaradas e inici
 # Exemplos de linguagem:
 #   a = 5
 #   b = a * 10
+
 def p_WOHeader(p): #WO = Without
     "Program : Code"
     p[0] = "START\n" + p[1] + "STOP\n" 
     
+
 # Nome da função: p_MultHeader
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -53,10 +56,12 @@ def p_WOHeader(p): #WO = Without
 # Exemplos de linguagem:
 #   var a
 #   var b
+
 def p_MultHeader(p):
     "Header : Header Decl"
     p[0] = p[1] + p[2] # Adiciona as novas declarações ao cabeçalho.
     
+
 # Nome da função: p_SingleHeader
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -64,6 +69,7 @@ def p_MultHeader(p):
 #   Lida com a declaração única no cabeçalho.
 # Exemplos de linguagem:
 #   var a
+
 def p_SingleHeader(p):
     "Header : Decl"
     p[0] = p[1]
@@ -85,6 +91,7 @@ sejam re-declaradas.
 # Exemplos de linguagem:
 #   var a, b, c
 #   var x
+
 def p_IntDecl(p):
     "Decl : VAR NameList" #Namelist permite declarar variáveis ao mesmo tempo. O que faz é adicionar à lista de variáveis.
     for name in p[2]:
@@ -95,6 +102,7 @@ def p_IntDecl(p):
         else:
             raise Exception(f"Variable {name} already declared.") # Trata erros de re-declaração.
 
+
 # Nome da função: p_NameList
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -103,6 +111,7 @@ def p_IntDecl(p):
 # Exemplos de linguagem:
 #   a
 #   a, b, c
+
 def p_NameList(p):
     """NameList : NAME
                 | NameList ',' NAME"""
@@ -110,6 +119,7 @@ def p_NameList(p):
         p[0] = [p[1]]
     else:  # Lista com vírgulas
         p[0] = p[1] + [p[3]]
+
 
 # Nome da função: p_ArrayDecl
 # Parâmetros de entrada:
@@ -119,6 +129,7 @@ def p_NameList(p):
 #   Lança uma exceção se o array já estiver declarado.
 # Exemplos de linguagem:
 #   var a[3]
+
 def p_ArrayDecl(p):
     "Decl : VAR NAME '[' NUM ']'" #example: Var a[3]  # Array tem de permitir Expr para ver índices (letras) nos ciclos
     if p[2] not in p.parser.trackmap:
@@ -137,6 +148,7 @@ def p_ArrayDecl(p):
 #   Lança uma exceção se a matriz já estiver declarada.
 # Exemplos de linguagem:
 #   var a[3][4]
+
 def p_MatrixDecl(p):
     "Decl : VAR NAME '[' NUM ']' '[' NUM ']'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
     if p[2] not in p.parser.trackmap:
@@ -163,6 +175,7 @@ Esta secção assegura que o parser possa interpretar corretamente varias instru
 # Exemplos de linguagem:
 #   a = 5
 #   b = a + 2
+
 def p_MultCode(p):
     "Code : Code Codes"
     p[0] = p[1] + p[2]# Combina seções de código.
@@ -175,9 +188,11 @@ def p_MultCode(p):
 #   Lida com um único bloco de código.
 # Exemplos de linguagem:
 #   a = 5
+
 def p_SingleCode(p):
     "Code : Codes"
     p[0] = p[1]
+
 
 # Nome da função: p_Codes
 # Parâmetros de entrada:
@@ -187,6 +202,7 @@ def p_SingleCode(p):
 # Exemplos de linguagem:
 #   if (a > b) then { ... }
 #   while (a < b) do { ... }
+
 def p_Codes(p):
     """Codes : Conditions
             | WhileDo
@@ -211,10 +227,12 @@ permitindo que o programa execute diferentes blocos de código com base em certa
 #   Trata a estrutura de 'if-then', gera as instruções de salto para a lógica condicional.
 # Exemplos de linguagem:
 #   if (a > b) then { ... }
+
 def p_CondIfThen(p):
     "Conditions : IF '(' Condition ')' THEN '{' Code '}'"
     p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"l{p.parser.idLabel}: NOP\n" # JZ - Jump Zero: Salta para o l{label} se a condição tiver valor 0 (false)
     p.parser.idLabel += 1                                                            # NOP - No Operation (não percebi porque isto é preciso)
+
 
 # Nome da função: p_CondIfThenOtherwise
 # Parâmetros de entrada:
@@ -223,10 +241,12 @@ def p_CondIfThen(p):
 #   Trata a estrutura de 'if-then-else', gera as instruções de salto para a lógica condicional.
 # Exemplos de linguagem:
 #   if (a > b) then { ... } otherwise { ... }
+
 def p_CondIfThenOtherwise(p):
     "Conditions : IF '(' Condition ')' THEN '{' Code '}' OTHERWISE '{' Code '}'"
     p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[7] + f"JUMP l{p.parser.idLabel}f\nl{p.parser.idLabel}: NOP\n" + p[11] + f"l{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
+
 
 # Nome da função: p_WhileDo
 # Parâmetros de entrada:
@@ -235,10 +255,12 @@ def p_CondIfThenOtherwise(p):
 #   Trata a estrutura de 'while-do', gera as instruções de loop com condição de saída.
 # Exemplos de linguagem:
 #   while (a < b) do { ... }
+
 def p_WhileDo(p):
     "WhileDo : WHILE '(' Condition ')' DO '{' Code '}'"
     p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[3] + f"JZ l{p.parser.idLabel}f\n" + p[7] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
+
 
 # Nome da função: p_RepeatUntil
 # Parâmetros de entrada:
@@ -247,6 +269,7 @@ def p_WhileDo(p):
 #   Trata a estrutura de 'repeat-until', gera as instruções de loop com condição de término após a execução.
 # Exemplos de linguagem:
 #   repeat { ... } until (a == b)
+
 def p_RepeatUntil(p):
     "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')'" 
     p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
@@ -270,6 +293,7 @@ que as operações de atribuição atualizem corretamente o estado do programa.
 # Exemplos de linguagem:
 #   a = 5
 #   b = a + 2
+
 def p_ExpressionAssign(p):
     "Assign : NAME '=' Expr"  #exemplo : b = 2 
     if p[1] in p.parser.trackmap:
@@ -290,6 +314,7 @@ def p_ExpressionAssign(p):
 #   Verifica se o array foi previamente declarado.
 # Exemplos de linguagem:
 #   a[2] = 10
+
 def p_ArrayAssign(p):
      "Assign : NAME '[' Expr ']' '=' Expr"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
@@ -301,6 +326,7 @@ def p_ArrayAssign(p):
      else:
           raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
+
 # Nome da função: p_MatrixAssign
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -309,6 +335,7 @@ def p_ArrayAssign(p):
 #   Verifica se a matriz foi previamente declarada.
 # Exemplos de linguagem:
 #   a[2][3] = 15
+
 def p_MatrixAssign(p): # Nome[Expr][Expr] = Expr
      "Assign : NAME '[' Expr ']' '[' Expr ']' '=' Expr"     # Matriz tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
@@ -335,9 +362,11 @@ bem como condições logicas como igualdade, desigualdade, maior que, etc. Gera 
 #   Permite que uma condição seja tratada como uma expressão.
 # Exemplos de linguagem:
 #   a > b
+
 def p_Expr_condition(p):
     'Expr : Condition'
     p[0] = p[1]
+
 
 # Nome da função: p_Expr_Variable
 # Parâmetros de entrada:
@@ -347,10 +376,12 @@ def p_Expr_condition(p):
 # Exemplos de linguagem:
 #   a
 #   b
+
 def p_Expr_Variable(p):
     'Expr : Variable'
     p[0] = p[1]
-    
+
+
 # Nome da função: p_expression_number
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -359,9 +390,11 @@ def p_Expr_Variable(p):
 # Exemplos de linguagem:
 #   5
 #   10
+
 def p_expression_number(p):
     "Expr : NUM"
     p[0] = f"PUSHI {p[1]}\n"
+
 
 # Nome da função: p_Expr_OP
 # Parâmetros de entrada:
@@ -375,6 +408,7 @@ def p_expression_number(p):
 #   e * f
 #   g / h
 #   i % j
+
 def p_Expr_OP(p):
     """Expr : Expr "+" Expr
             | Expr "-" Expr
@@ -393,6 +427,7 @@ def p_Expr_OP(p):
     elif (p[2] == '%'):
         p[0] = p[1] + p[3] + "MOD \n"            
 
+
 # Nome da função: p_condLog
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -409,6 +444,7 @@ def p_Expr_OP(p):
 #   l <= m
 #   n && o
 #   p || q
+
 def p_condLog(p):
     """Condition : Expr EQ Expr
                   | Expr NEQ Expr
@@ -441,6 +477,7 @@ def p_condLog(p):
         p[0] = p[1] + p[3] + "ADD\nPUSHI 1\nSUPEQ\n"
     elif (p[1] == "Var"):
         p[0] = p[1]
+
 
 # Nome da função: p_Expr_base
 # Parâmetros de entrada:
@@ -550,13 +587,50 @@ def p_error(p):
 
 #___________________________________________________________________________________________________________#
 
+#### Input (Assignments) ####
+
+def p_Input_Array(p):
+    "Assign : NAME '[' Expr ']' '=' INPUT"
+    if p[1] in p.parser.trackmap:
+        var = p.parser.trackmap.get(p[1])
+        if len(var) == 2:
+            p[0] = f'PUSHGP\nPUSHI {var[0]}\nPADD\n' + p[3] + f'READ\nATOI\nSTOREN\n'
+        else:
+            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not an array.")
+    else:
+        raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
+
+def p_Input_Matrix(p):
+    "Assign : NAME '[' Expr ']' '[' Expr ']' '=' INPUT"
+    if p[1] in p.parser.trackmap:
+        var = p.parser.trackmap.get(p[1])
+        if len(var) == 3:
+            p[0] = f'PUSHGP\nPUSHI {var[0]}\nPADD\n{p[3]}PUSHI {var[2]}\nMUL\n{p[6]}ADD\nREAD\nATOI\nSTOREN\n'
+        else:
+            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not a matrix.")
+    else:
+        raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
+
+def p_Input_Var(p):
+    "Assign : NAME '=' INPUT"
+    if p[1] in p.parser.trackmap:
+        var = p.parser.trackmap.get(p[1])
+        if type(var) == int:
+            p[0] = f'READ\nATOI\nSTOREG {var}\n'
+        else:
+            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not an integer.")
+    else:
+        raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
+
+#___________________________________________________________________________________________________________#
+
 #### Print ####
 '''
 Gerencia as instruções de impressão, permitindo que os valores de variáveis, arrays e matrizes sejam exibidos. Para variáveis simples,
 imprime o valor seguido de uma nova linha. Para arrays e matrizes, itera sobre os elementos e imprime de forma formatada.
 '''
 
-# Nome da função: p_Print
+# Nome da função: p_Print_Expr
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
 # Explicação da função:
@@ -565,8 +639,8 @@ imprime o valor seguido de uma nova linha. Para arrays e matrizes, itera sobre o
 # Exemplos de linguagem:
 #   print a
 #   print b
-def p_Print(p):
-    "Print : PRINT Expr"
+def p_Print_Expr(p):
+    'Print : PRINT Expr'
     p[0] = p[2] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
 
 # Nome da função: p_Print
@@ -582,6 +656,7 @@ def p_PrintArrMat(p):
     "Print : PRINT NAME"
     if p[2] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[2])
+            
         if type(var) == tuple:
             if len(var) == 2:
                 array = f'PUSHS "[ "\nWRITES\n'

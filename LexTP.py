@@ -8,11 +8,8 @@ Esta secção define as palavras reservadas da linguagem que estão a ser analis
 As palavras reservadas são mapeadas para tipos de tokens específicos que serão utilizados pelo parser.
 '''
 reserved = {
-    'array': 'ARRAY',
-    'matrix': 'MATRIX',
     'print': 'PRINT',
     'input': 'INPUT',
-    'read': 'READ',
     'while': 'WHILE',
     'do': 'DO',
     'repeat': 'REPEAT',
@@ -26,7 +23,6 @@ reserved = {
     'lesseq': 'LESSEQ',
     'and': 'AND',
     'or': 'OR',
-    'not':'NOT',
 }
 
 #___________________________________________________________________________________________________________#
