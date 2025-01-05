@@ -13,17 +13,17 @@ O QUE FUNCIONA:
 - Write (Print) no stdout
 
 O QUE NÃO FUNCIONA:
-- ?
+- Write (Print) de matrizes ou arrays (possivelmente por causa do warning do print)
 
 O QUE FALTA:
 - Retificar a gramática
 - Fazer relatório
 - Resolver warning do print
 
-DEBUGGING:
+PRIORIDADE:
+- Fazer relatório
 
-WARNING: Token 'NOT' defined, but not used
-WARNING: There is 1 unused token
+DEBUGGING:
 
 Função responsável pelo PRINT gera os Warnings:
 
