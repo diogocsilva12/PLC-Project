@@ -9,7 +9,6 @@ c = 0
 print a
 print b
 
-
 if (a < b) then {
     c = a + b
 } otherwise {
@@ -18,13 +17,11 @@ if (a < b) then {
 
 print c
 
-
 while (c > 0) do {
     c = c - 2
 }
 
 print c
-
 
 repeat {
     c = c + 1

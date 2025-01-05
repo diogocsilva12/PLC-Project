@@ -1,0 +1,10 @@
+var x
+var y
+var result
+
+x = input
+y = input
+
+result = x + y
+
+print result
