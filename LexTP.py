@@ -71,7 +71,7 @@ def t_VAR(t):
     return t
 
 def t_NAME(t):
-    r'[a-zA-Z]+'
+    r'[a-zA-ZÀ-ÿ]+'
     t.type = reserved.get(t.value, 'NAME')
     return t
 
@@ -106,6 +106,10 @@ def t_error(t):
 Define os caracteres que o lexer deve ignorar. Neste caso, espaços, retornos de carro e tabulações são ignorados.
 '''
 t_ignore  = ' \r\t'
+
+def t_COMMENT(t):
+    r'\#.*'
+    pass
 
 
 #___________________________________________________________________________________________________________#

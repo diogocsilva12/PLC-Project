@@ -1,0 +1,21 @@
+#Este teste demonstra a declaração e manipulação de um array unidimensional de inteiros, atribuindo valores aos seus elementos usando indexação direta e expressões, e iterando através do array para imprimir o seu conteúdo.
+
+var x;
+var arr[4];
+var mat[2][2];
+
+x = 1;
+
+arr[0] = 1;
+arr[1] = 222;
+arr[2] = 3;
+arr[3] = 1123;
+
+mat[0][0] = 4;
+mat[0][1] = 72;
+mat[1][0] = 6;
+mat[1][1] = 7;
+
+print x;
+print mat;
+print arr;

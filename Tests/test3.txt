@@ -1,0 +1,12 @@
+#Este teste demonstra a leitura de entrada do standard input e a escrita de saída para o standard output, interagindo com o utilizador para obter o seu nome e idade.
+
+var x;
+var y;
+var result;
+
+x = input;
+y = input;
+
+result = x + y;
+
+print result;

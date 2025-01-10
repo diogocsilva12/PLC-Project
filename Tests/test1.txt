@@ -1,0 +1,15 @@
+#Este teste declara e manipula variáveis atómicas do tipo inteiro, realiza operações aritméticas e lógicas, e usa instruções condicionais para imprimir valores com base em comparações.
+var a, b, c;
+
+a = 10;
+b = 5;
+c = a + b * 2;
+print c;
+
+if (a > b && c < 30) then {
+    print a;
+}
+
+if (!(a == b)) then {
+    print b;
+}

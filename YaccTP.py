@@ -713,15 +713,16 @@ Se nenhum arquivo for fornecido, entra em modo interativo, permitindo que o util
 #   python YaccTP.py test_input.txt output_file.txt
 if len(sys.argv) > 1:
     input_file = sys.argv[1]
-    # Generate output filename by prepending "res" to input filename
-    output_file = "Assembly_" + os.path.basename(input_file)
+    if not os.path.exists("Outputs"):
+        os.makedirs("Outputs")
+    output_file = os.path.join("Outputs", "Assembly_" + os.path.basename(input_file))
     
     with open(input_file, 'r') as file:
         assembly = parser.parse(file.read())
         if assembly:
             with open(output_file, 'w') as output:
                 output.write(assembly)
-                print(f"{input_file} compiled successfully!\nCheck the output in {output_file}.")
+                print(f"{input_file} compiled successfully!\nCheck the output in Outputs/{output_file}.")
         else:
             print("Empty!")
 else:
