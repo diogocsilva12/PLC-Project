@@ -13,13 +13,16 @@ O QUE FUNCIONA:
 - Write (Print) no stdout
 
 O QUE NÃO FUNCIONA:
-- ?
+- Write (Print) de matrizes ou arrays (possivelmente por causa do warning do print)
 
 O QUE FALTA:
 - Alterar tudo para conter ';' ** IMPORTANTE ** 
 - Retificar a gramática
 - Fazer relatório
 - Resolver warning do print
+
+PRIORIDADE:
+- Fazer relatório
 
 DEBUGGING:
 
