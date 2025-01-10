@@ -1,10 +1,10 @@
-var x
-var y
-var result
+var x;
+var y;
+var result;
 
-x = input
-y = input
+x = input;
+y = input;
 
-result = x + y
+result = x + y;
 
-print result
+print result;
