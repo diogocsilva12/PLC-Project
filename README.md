@@ -16,14 +16,12 @@ O QUE NÃO FUNCIONA:
 - ?
 
 O QUE FALTA:
+- Alterar tudo para conter ';' ** IMPORTANTE ** 
 - Retificar a gramática
 - Fazer relatório
 - Resolver warning do print
 
 DEBUGGING:
-
-WARNING: Token 'NOT' defined, but not used
-WARNING: There is 1 unused token
 
 Função responsável pelo PRINT gera os Warnings:
 

@@ -45,7 +45,7 @@ tokens = [
 Define os caracteres literais que são reconhecidos diretamente pelo lexer. Estes incluem símbolos como
 dois pontos, vírgulas, iguais, chavetas, colchetes, parênteses, ponto e vírgula e operadores aritméticos e lógicos.
 '''
-literals = [':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!']
+literals = [';',':',',','=','{','}','|','"','','[',']','(',')',';','+','-','*','/','%','>','<','!']
 
 #___________________________________________________________________________________________________________#
 #### Regras de Expressões Regulares ####

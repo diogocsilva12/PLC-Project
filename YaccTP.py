@@ -93,7 +93,7 @@ sejam re-declaradas.
 #   var x
 
 def p_IntDecl(p):
-    "Decl : VAR NameList" #Namelist permite declarar variáveis ao mesmo tempo. O que faz é adicionar à lista de variáveis.
+    "Decl : VAR NameList ';'" #Namelist permite declarar variáveis ao mesmo tempo. O que faz é adicionar à lista de variáveis.
     for name in p[2]:
         if name not in p.parser.trackmap:
             p.parser.trackmap.update({name: p.parser.memPointer}) # Rastreia a variável na memória.
@@ -131,11 +131,12 @@ def p_NameList(p):
 #   var a[3]
 
 def p_ArrayDecl(p):
-    "Decl : VAR NAME '[' NUM ']'" #example: Var a[3]  # Array tem de permitir Expr para ver índices (letras) nos ciclos
+    "Decl : VAR NAME '[' NUM ']' ';'" #example: Var a[3]  # Array tem de permitir Expr para ver índices (letras) nos ciclos
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]))}) # Rastreia o array na memória.
-        p[0] = f"PUSHN {p[4]}\n"# Aloca espaço para o array na memória.
-        p.parser.memPointer += int({p[4]})# Atualiza o apontador de memória pelo tamanho do array.
+        memSpace = int(p[4]) # Calcula o espaço necessário para o array.
+        p[0] = f"PUSHN {memSpace}\n"# Aloca espaço para o array na memória.
+        p.parser.memPointer += int(p[4])# Atualiza o apontador de memória pelo tamanho do array.
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is already declared.")# Trata erros de re-declaração.
 
@@ -150,7 +151,7 @@ def p_ArrayDecl(p):
 #   var a[3][4]
 
 def p_MatrixDecl(p):
-    "Decl : VAR NAME '[' NUM ']' '[' NUM ']'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
+    "Decl : VAR NAME '[' NUM ']' '[' NUM ']' ';'" #example: Var a[3][4]   # Matriz tem de permitir Expr para ver índices (letras) nos ciclos 
     if p[2] not in p.parser.trackmap:
         p.parser.trackmap.update({p[2]: (p.parser.memPointer, int(p[4]), int(p[7]))})
         memSpace = int(p[4]) * int(p[7]) # Calcula o espaço total necessário para a matriz.
@@ -295,7 +296,7 @@ que as operações de atribuição atualizem corretamente o estado do programa.
 #   b = a + 2
 
 def p_ExpressionAssign(p):
-    "Assign : NAME '=' Expr"  #exemplo : b = 2 
+    "Assign : NAME '=' Expr ';'"  #exemplo : b = 2 
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if type(var) == int:
@@ -316,7 +317,7 @@ def p_ExpressionAssign(p):
 #   a[2] = 10
 
 def p_ArrayAssign(p):
-     "Assign : NAME '[' Expr ']' '=' Expr"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
+     "Assign : NAME '[' Expr ']' '=' Expr ';'"   # Array tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
           varInfo = p.parser.trackmap.get(p[1])
           if len(varInfo) == 2:
@@ -337,7 +338,7 @@ def p_ArrayAssign(p):
 #   a[2][3] = 15
 
 def p_MatrixAssign(p): # Nome[Expr][Expr] = Expr
-     "Assign : NAME '[' Expr ']' '[' Expr ']' '=' Expr"     # Matriz tem de permitir Expr para ver índices (letras) nos ciclos
+     "Assign : NAME '[' Expr ']' '[' Expr ']' '=' Expr ';'"     # Matriz tem de permitir Expr para ver índices (letras) nos ciclos
      if p[1] in p.parser.trackmap:
             varInfo = p.parser.trackmap.get(p[1])
             if len(varInfo) == 3:
@@ -529,7 +530,7 @@ def p_VarNum(p):
         if type(var) == int:
             p[0] = f"PUSHG {var}\n"
         else:
-            raise TypeError(f"Line {p.lineno(1)}, {p[1]} %% is not an integer.")
+            raise TypeError(f"Line {p.lineno(1)}, {p[1]} is not an integer.")
     else:
         raise Exception(f"Line {p.lineno(1)}, {p[1]} is not declared.")
 
@@ -590,7 +591,7 @@ def p_error(p):
 #### Input (Assignments) ####
 
 def p_Input_Array(p):
-    "Assign : NAME '[' Expr ']' '=' INPUT"
+    "Assign : NAME '[' Expr ']' '=' INPUT ';'"
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if len(var) == 2:
@@ -601,7 +602,7 @@ def p_Input_Array(p):
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_Input_Matrix(p):
-    "Assign : NAME '[' Expr ']' '[' Expr ']' '=' INPUT"
+    "Assign : NAME '[' Expr ']' '[' Expr ']' '=' INPUT ';'"
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if len(var) == 3:
@@ -612,7 +613,7 @@ def p_Input_Matrix(p):
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
 def p_Input_Var(p):
-    "Assign : NAME '=' INPUT"
+    "Assign : NAME '=' INPUT ';'"
     if p[1] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[1])
         if type(var) == int:
@@ -639,9 +640,8 @@ imprime o valor seguido de uma nova linha. Para arrays e matrizes, itera sobre o
 # Exemplos de linguagem:
 #   print a
 #   print b
-def p_Print_Expr(p):
-    'Print : PRINT Expr'
-    p[0] = p[2] + 'WRITEI\nPUSHS "\\n"\nWRITES\n'
+
+
 
 # Nome da função: p_Print
 # Parâmetros de entrada:
@@ -653,7 +653,7 @@ def p_Print_Expr(p):
 #   print a
 #   print b
 def p_PrintArrMat(p):
-    "Print : PRINT NAME"
+    "Print : PRINT NAME ';'"
     if p[2] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[2])
             
@@ -674,7 +674,7 @@ def p_PrintArrMat(p):
                     matrix += 'PUSHS "]\\n"\nWRITES\n'
                 p[0] = matrix
         else:
-            raise TypeError(f"Line{p.lineno(2)}, {p[2]} is not an array or matrix.")
+            p[0] = f'PUSHG {var}\nWRITEI\nPUSHS "\\n"\nWRITES\n'
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is not declared.")
 
