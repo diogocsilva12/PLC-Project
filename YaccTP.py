@@ -302,7 +302,7 @@ def p_ExpressionAssign(p):
         if type(var) == int:
             p[0] = p[3] + f"STOREG {var}\n" # Armazena o resultado da expressão na variável.
         else:
-            raise TypeError(f"Line{p.lineno(2)}, {p[1]} ## is not an integer.")  # Verifica se a variável é um inteiro.
+            raise TypeError(f"Line{p.lineno(2)}, {p[1]} is not an integer.")  # Verifica se a variável é um inteiro.
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[1]} is not declared.")
 
