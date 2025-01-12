@@ -633,18 +633,6 @@ Gerencia as instruções de impressão, permitindo que os valores de variáveis,
 imprime o valor seguido de uma nova linha. Para arrays e matrizes, itera sobre os elementos e imprime de forma formatada.
 '''
 
-# Nome da função: p_Print_Expr
-# Parâmetros de entrada:
-#   - p: lista que contém os elementos da regra
-# Explicação da função:
-#   Trata a instrução de impressão, gera as instruções correspondentes para exibir o valor da expressão.
-#   Adiciona uma nova linha após a impressão.
-# Exemplos de linguagem:
-#   print a
-#   print b
-
-
-
 # Nome da função: p_Print
 # Parâmetros de entrada:
 #   - p: lista que contém os elementos da regra
@@ -740,22 +728,5 @@ else:
 
 
 #___________________________________________________________________________________________________________#
-'''
-Exemplo de uso:
--------------------------------------------------
-Conteúdo de "test_input.txt":
-    var a,b;
-    a = 5;
-    b = a * 10;
-    if( a > 40 ) then {
-       b = b + 1;
-    }
-    print a;
-    print b;
--------------------------------------------------
-Invocação:
-    python YaccTP.py test_input.txt output_file.txt
-Verifique "output_file.txt" para o código assembly gerado.
-'''
 
 
