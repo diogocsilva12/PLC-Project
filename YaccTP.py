@@ -272,7 +272,7 @@ def p_WhileDo(p):
 #   repeat { ... } until (a == b)
 
 def p_RepeatUntil(p):
-    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')'" 
+    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')' ';'"
     p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
     p.parser.idLabel += 1
      

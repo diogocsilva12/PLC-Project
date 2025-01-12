@@ -71,15 +71,17 @@ def t_VAR(t):
     r'var'
     return t
 
-def t_NAME(t):
-    r'[a-zA-ZÀ-ÿ]+'
-    t.type = reserved.get(t.value, 'NAME')
-    return t
-
 def t_NUM(t):
     r'\d+'
     t.value = int(t.value)
     return t
+
+def t_NAME(t):
+    r'[a-zA-ZÀ-ÿ_][a-zA-ZÀ-ÿ0-9_]*'
+    t.type = reserved.get(t.value, 'NAME')
+    return t
+
+
 
 def t_STRING(t):
     r'"([^"\\]|\\.)*"'
@@ -103,7 +105,7 @@ Esta função é chamada sempre que um caractere ilegal é encontrado pelo lexer
 lexer passar caractere inválido para continuar a análise.
 '''
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
 
 #___________________________________________________________________________________________________________#
