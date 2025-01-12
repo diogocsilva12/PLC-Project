@@ -1,0 +1,16 @@
+PUSHI 0
+START
+PUSHI 15
+STOREG 0
+PUSHG 0
+PUSHI 10
+SUP 
+JZ l0
+PUSHS "O número é maior que 10"
+WRITES
+JUMP l0f
+l0: NOP
+PUSHS "O número não é maior que 10"
+WRITES
+l0f: NOP
+STOP

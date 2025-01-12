@@ -677,6 +677,10 @@ def p_Print(p):
             p[0] = f'PUSHG {var}\nWRITEI\nPUSHS "\\n"\nWRITES\n'
     else:
         raise Exception(f"Line{p.lineno(2)}, {p[2]} is not declared.")
+    
+def p_PrintString(p):
+    "Print : PRINT STRING ';'"
+    p[0] = f'PUSHS "{p[2]}"\nWRITES\n'
 
 #___________________________________________________________________________________________________________#
 

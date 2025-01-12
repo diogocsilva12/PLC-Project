@@ -35,7 +35,8 @@ e as palavras reservadas previamente definidas.
 tokens = [
     'NAME',
     'VAR',
-    'NUM'
+    'NUM',
+    'STRING',
 ] + list(reserved.values())
 
 
@@ -78,6 +79,11 @@ def t_NAME(t):
 def t_NUM(t):
     r'\d+'
     t.value = int(t.value)
+    return t
+
+def t_STRING(t):
+    r'"([^"\\]|\\.)*"'
+    t.value = t.value.strip('"')
     return t
 
 
