@@ -231,7 +231,7 @@ permitindo que o programa execute diferentes blocos de código com base em certa
 
 def p_CondIfThen(p):
     "Conditions : IF '(' Condition ')' THEN '{' Code '}'"
-    p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[6] + f"l{p.parser.idLabel}: NOP\n" # JZ - Jump Zero: Salta para o l{label} se a condição tiver valor 0 (false)
+    p[0] = p[3] + f"JZ l{p.parser.idLabel}\n" + p[7] + f"l{p.parser.idLabel}: NOP\n" # JZ - Jump Zero: Salta para o l{label} se a condição tiver valor 0 (false)
     p.parser.idLabel += 1                                                            # NOP - No Operation (não percebi porque isto é preciso)
 
 
@@ -652,7 +652,7 @@ imprime o valor seguido de uma nova linha. Para arrays e matrizes, itera sobre o
 # Exemplos de linguagem:
 #   print a
 #   print b
-def p_PrintArrMat(p):
+def p_Print(p):
     "Print : PRINT NAME ';'"
     if p[2] in p.parser.trackmap:
         var = p.parser.trackmap.get(p[2])
