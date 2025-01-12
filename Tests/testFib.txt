@@ -1,0 +1,26 @@
+var n, a, b, temp;
+print "Digite um numero para calcular Fibonacci: \n";
+n = input;
+a = 0;
+b = 1;
+
+print "Sequencia de Fibonacci:\n";
+
+if (n == 0) then {
+    print a;
+} otherwise {
+    if (n == 1) then {
+        print a;
+        print b;
+    } otherwise {
+        print a;
+        print b;
+        while (n > 1) do {
+            temp = a + b;
+            a = b;
+            b = temp;
+            print temp;
+            n = n - 1;
+        }
+    }
+}
