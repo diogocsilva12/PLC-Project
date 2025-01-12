@@ -8,7 +8,7 @@ PUSHG 0
 PUSHI 5
 INF 
 JZ l1f
-PUSHS "Iteração do ciclo while: "
+PUSHS "Iteração do ciclo while: \n"
 WRITES
 PUSHG 0
 WRITEI
@@ -21,7 +21,7 @@ STOREG 0
 PUSHI 0
 STOREG 1
 l0c: NOP
-PUSHS "  Ciclo repeat aninhado: "
+PUSHS "  Ciclo repeat aninhado: \n"
 WRITES
 PUSHG 1
 WRITEI
