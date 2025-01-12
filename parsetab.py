@@ -75,5 +75,5 @@ _lr_productions = [
   ('Assign -> NAME [ Expr ] = INPUT ;','Assign',7,'p_Input_Array','YaccTP.py',594),
   ('Assign -> NAME [ Expr ] [ Expr ] = INPUT ;','Assign',10,'p_Input_Matrix','YaccTP.py',605),
   ('Assign -> NAME = INPUT ;','Assign',4,'p_Input_Var','YaccTP.py',616),
-  ('Print -> PRINT NAME ;','Print',3,'p_PrintArrMat','YaccTP.py',656),
+  ('Print -> PRINT NAME ;','Print',3,'p_Print','YaccTP.py',656),
 ]
