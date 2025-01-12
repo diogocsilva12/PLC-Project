@@ -6,11 +6,24 @@ PUSHG 0
 PUSHI 10
 SUP 
 JZ l0
-PUSHS "O número é maior que 10"
+PUSHS "O número é maior que 10 \n"
 WRITES
 JUMP l0f
 l0: NOP
-PUSHS "O número não é maior que 10"
+PUSHS "O número não é maior que 10 \n"
 WRITES
 l0f: NOP
+PUSHG 0
+PUSHI 2
+MOD 
+PUSHI 0
+EQUAL 
+JZ l1
+PUSHS "O número é par\n"
+WRITES
+JUMP l1f
+l1: NOP
+PUSHS "O número é ímpar\n"
+WRITES
+l1f: NOP
 STOP

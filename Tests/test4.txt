@@ -5,9 +5,14 @@ var num;
 num = 15;
 
 if (num > 10) then {
-    print "O número é maior que 10";
+    print "O número é maior que 10 \n";
 } otherwise {
-    print "O número não é maior que 10";
+    print "O número não é maior que 10 \n";
+}
+if ((num % 2) == 0) then {
+    print "O número é par\n";
+} otherwise {
+    print "O número é ímpar\n";
 }
 
 
