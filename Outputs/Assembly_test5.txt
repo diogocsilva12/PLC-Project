@@ -1,13 +1,14 @@
 PUSHI 0
+PUSHI 0
 START
 PUSHI 0
 STOREG 0
-l0c: NOP
+l1c: NOP
 PUSHG 0
-PUSHI 3
+PUSHI 5
 INF 
-JZ l0f
-PUSHS "Inside while: "
+JZ l1f
+PUSHS "Iteração do ciclo while: "
 WRITES
 PUSHG 0
 WRITEI
@@ -17,16 +18,35 @@ PUSHG 0
 PUSHI 1
 ADD 
 STOREG 0
+PUSHI 0
+STOREG 1
+l0c: NOP
+PUSHG 1
+PUSHI 3
+EQUAL 
+JZ l0f
+PUSHS "  Ciclo repeat aninhado: "
+WRITES
+PUSHG 1
+WRITEI
+PUSHS "\n"
+WRITES
+PUSHG 1
+PUSHI 1
+ADD 
+STOREG 1
 JUMP l0c
 l0f: NOP
-PUSHI 5
+JUMP l1c
+l1f: NOP
+PUSHI 10
 STOREG 0
-l1c: NOP
+l2c: NOP
 PUSHG 0
-PUSHI 0
+PUSHI 5
 EQUAL 
-JZ l1f
-PUSHS "Inside repeat: "
+JZ l2f
+PUSHS "Iteração do ciclo repeat: "
 WRITES
 PUSHG 0
 WRITEI
@@ -36,6 +56,6 @@ PUSHG 0
 PUSHI 1
 SUB 
 STOREG 0
-JUMP l1c
-l1f: NOP
+JUMP l2c
+l2f: NOP
 STOP

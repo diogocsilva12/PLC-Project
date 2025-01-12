@@ -1,19 +1,24 @@
 #Este teste cobre as estruturas de ciclo while-do e repeat-until, incluindo ciclos aninhados, demonstrando como controlar o fluxo de execução com base em condições e iterar através de um bloco de código múltiplas vezes.
 #CURRENTLY NOT WORKING -> PRINTS ARE THE ISSUE, THEY DONT PRINT STRINGS IG
-var a;
+var contador1, contador2;
 
-a = 0;
+contador1 = 0;
+while (contador1 < 5) do {
+    print "Iteração do ciclo while: ";
+    print contador1;
+    contador1 = contador1 + 1;
 
-while (a < 3) do {
-    print "Inside while: ";
-    print a;
-    a = a + 1;
+    contador2 = 0;
+    repeat {
+        print "  Ciclo repeat aninhado: ";
+        print contador2;
+        contador2 = contador2 + 1;
+    } until (contador2 == 3);
 }
 
-a = 5;
-
+contador1 = 10;
 repeat {
-    print "Inside repeat: ";
-    print a;
-    a = a - 1;
-} until (a == 0);
+    print "Iteração do ciclo repeat: ";
+    print contador1;
+    contador1 = contador1 - 1;
+} until (contador1 == 5);
