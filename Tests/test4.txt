@@ -1,6 +1,5 @@
 #Este teste exemplifica a estrutura de seleção if-then-else, 
 #executando diferentes blocos de código consoante uma condição seja verdadeira ou falsa, especificamente verificando se um número é maior que 10 e se é par ou ímpar.
-#CURRENTLY NOT WORKING -> PRINTS ARE THE ISSUE, THEY DONT PRINT STRINGS IG
 var num;
 
 num = 15;

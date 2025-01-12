@@ -272,8 +272,10 @@ def p_WhileDo(p):
 #   repeat { ... } until (a == b)
 
 def p_RepeatUntil(p):
-    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')' ';'"
-    p[0] = f"l{p.parser.idLabel}c: NOP\n" + p[7] + f"JZ l{p.parser.idLabel}f\n" + p[3] + f"JUMP l{p.parser.idLabel}c\nl{p.parser.idLabel}f: NOP\n"
+    "RepeatUntil : REPEAT '{' Code '}' UNTIL '(' Condition ')' ';' " 
+    p[0] = (
+        f"l{p.parser.idLabel}c: NOP\n" + p[3]+ p[7]+ f"JZ l{p.parser.idLabel}c\n"+ f"JUMP l{p.parser.idLabel}f\n"+ f"l{p.parser.idLabel}f: NOP\n"
+    )
     p.parser.idLabel += 1
      
 #___________________________________________________________________________________________________________#
@@ -726,7 +728,7 @@ if len(sys.argv) > 1:
         if assembly:
             with open(output_file, 'w') as output:
                 output.write(assembly)
-                print(f"{input_file} compiled successfully!\nCheck the output in Outputs/{output_file}.")
+                print(f"{input_file} compiled successfully!\nCheck the output in {output_file}.")
         else:
             print("Empty!")
 else:
